@@ -5,9 +5,22 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  box-sizing: border-box;
+  --primary-dark-color: black;
+  --primary-light-color: white;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+#nest-messages {
+  /* display: none; */
+  position: absolute;
+  width: 100%;
+  top: 5rem;
+  left: 25vw;
+  width: 50vw;
+  margin-left: auto;
+  margin-right: auto;
 }
+
+/* .block {
+  display: block;
+} */ 

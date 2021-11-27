@@ -1,26 +1,43 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Header from "./components/Header";
+import { Table } from "antd";
+import "antd/dist/antd.css";
+import { columns } from "./components/Table";
+import UserForm from "./components/UserInput";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "./store/store";
+import { formActions } from "./store/form-slice";
+import { AppDispatch } from "./store/store";
+import { listActions } from "./store/list-slice";
+import { User } from "./types/types";
 
-function App() {
+const App: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const inputIsVisible = useSelector((state: RootState) => state.form.visible);
+  const actualListOfUsers = useSelector((state: RootState) => state.listOfUsers.initialUsersLists)
+  const onCreate = (values: User) => { console.log(values)
+    dispatch(listActions.addNewUser(values));
+    dispatch(formActions.toggle());
+   
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Header />
+      <Table
+        dataSource={actualListOfUsers}
+        columns={columns}
+        rowKey="id"
+        bordered
+      />
+      <UserForm
+        visible={inputIsVisible}
+        onCreate={onCreate}
+        onCancel={() => {
+          dispatch(formActions.toggle());
+        }}
+      />
     </div>
   );
-}
+};
 
 export default App;

@@ -1,7 +1,7 @@
 import Header from "./components/Header";
-import { Table } from "antd";
+
 import "antd/dist/antd.css";
-import { columns } from "./components/Table";
+
 import UserForm from "./components/UserInput";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./store/store";
@@ -9,12 +9,11 @@ import { formActions } from "./store/form-slice";
 import { AppDispatch } from "./store/store";
 import { listActions } from "./store/list-slice";
 import { User } from "./types/types";
-
+import TableOfUsers from "./components/TableOfUsers";
 const App: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const inputIsVisible = useSelector((state: RootState) => state.form.visible);
-  const actualListOfUsers = useSelector((state: RootState) => state.listOfUsers.initialUsersLists)
-  const onCreate = (values: User) => { console.log(values)
+  const onCreate = (values: User) => {
     dispatch(listActions.addNewUser(values));
     dispatch(formActions.toggle());
    
@@ -23,12 +22,6 @@ const App: React.FC = () => {
   return (
     <div>
       <Header />
-      <Table
-        dataSource={actualListOfUsers}
-        columns={columns}
-        rowKey="id"
-        bordered
-      />
       <UserForm
         visible={inputIsVisible}
         onCreate={onCreate}
@@ -36,6 +29,7 @@ const App: React.FC = () => {
           dispatch(formActions.toggle());
         }}
       />
+      <TableOfUsers />
     </div>
   );
 };

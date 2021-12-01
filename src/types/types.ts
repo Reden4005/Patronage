@@ -1,6 +1,6 @@
 /** type UserData for data from form */
 
-export type UserData = {
+export interface UserData {
   id: string;
   name: string;
   lastName: string;
@@ -10,11 +10,11 @@ export type UserData = {
   phoneNumber: string;
   address: string;
   dateOfBirth: moment.Moment;
-  hobbies: string[] | string;
+  hobbies: string[];
 };
 
 /** type User for data from base of users*/
-export type User = {
+export interface User {
   id: string;
   name: string;
   lastName: string;
@@ -24,8 +24,8 @@ export type User = {
   phoneNumber: string;
   address: string;
   dateOfBirth: string;
-  hobbies: string[] | string;
-  hobbiesName?: string[] | string;
+  hobbies: string[];
+  hobbiesName?: string;
 };
 
 export type Hobbie = {

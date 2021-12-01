@@ -1,13 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
-import transformedUsers from "../UI/mapHobbies";
 import { generateId } from "../UI/idGenerator";
+import { User } from "../types/types";
 
 const listSlice = createSlice({
   name: "usersList",
-  initialState: { initialUsersLists: transformedUsers },
+  initialState: { initialUsersLists: new Array<User>() },
   reducers: {
+    initializeState(state, action) {
+      state.initialUsersLists = (action.payload as User[])
+    },
     addNewUser(state, action) {
-      state.initialUsersLists.push({
+      state.initialUsersLists!.push({
         id: generateId("user"),
         name: action.payload.name,
         lastName: action.payload.lastName,
@@ -32,5 +35,4 @@ const listSlice = createSlice({
 });
 
 export const listActions = listSlice.actions;
-
 export default listSlice;

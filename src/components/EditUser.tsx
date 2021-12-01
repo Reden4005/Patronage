@@ -2,6 +2,9 @@ import { Form, Input, InputNumber, Select, DatePicker, Modal } from "antd";
 import HOBBIES from "../store/HOBBIES";
 import { User } from "../types/types";
 import { UserData } from "../types/types";
+import { useSelector } from "react-redux";
+import { RootState } from "../store/store";
+import moment from "moment";
 
 const { Option } = Select;
 
@@ -11,14 +14,15 @@ interface UserFormProps {
   onCancel: () => void;
 }
 
-const UserForm: React.FC<UserFormProps> = ({ visible, onCreate, onCancel }) => {
-  //////typ <>
+const EditUser: React.FC<UserFormProps> = ({ visible, onCreate, onCancel }) => {
+  const edit = useSelector((state: RootState) => state.edit.edit);
+	console.log(edit, "edit")
   const [form] = Form.useForm<UserData>();
 
   return (
     <Modal
       visible={visible}
-      title="Add new user"
+      title="Edit a user"
       okText="Create"
       cancelText="Cancel"
       onCancel={onCancel}
@@ -45,50 +49,44 @@ const UserForm: React.FC<UserFormProps> = ({ visible, onCreate, onCancel }) => {
         name="form_in_modal"
         initialValues={{ modifier: "public" }}
       >
-        <Form.Item name={["name"]} label="Name" rules={[{ required: true }]}>
+        <Form.Item name={["name"]} label="Name" rules={[{ required: true }]} initialValue={edit?.name}>
           <Input />
         </Form.Item>
         <Form.Item
           name={["lastName"]}
           label="Last name"
           rules={[{ required: true }]}
+					initialValue={edit?.lastName}
         >
           <Input />
         </Form.Item>
-        <Form.Item
-          name={["email"]}
-          label="Email"
-          rules={[{ type: "email", required: true }]}
-        >
+        <Form.Item name={["email"]} label="Email" rules={[{ type: "email" }]} initialValue={edit?.email}>
           <Input />
         </Form.Item>
         <Form.Item
           name={["age"]}
           label="Age"
-          rules={[{ type: "number", min: 0, max: 99, required: true }]}
+          rules={[{ type: "number", min: 0, max: 99 }]}
+					initialValue={edit?.age}
         >
           <InputNumber />
         </Form.Item>
-        <Form.Item label="Gender" name={["gender"]}>
-          <Select>
+        <Form.Item label="Gender" name={["gender"]} initialValue={edit?.gender}>
+          <Select >
             <Option value="Male">Male</Option>
             <Option value="Female">Female</Option>
           </Select>
         </Form.Item>
-        <Form.Item name={["phoneNumber"]} label="phoneNumber">
+        <Form.Item name={["phoneNumber"]} label="phoneNumber" initialValue={edit?.phoneNumber}>
           <Input />
         </Form.Item>
-        <Form.Item name={["address"]} label="address">
+        <Form.Item name={["address"]} label="address" initialValue={edit?.address}>
           <Input />
         </Form.Item>
-        <Form.Item name={["dateOfBirth"]} label="Date of birth">
+        <Form.Item name={["dateOfBirth"]} label="Date of birth" initialValue={moment(edit?.dateOfBirth)}>
           <DatePicker />
         </Form.Item>
-        <Form.Item
-          label="Hobbies"
-          name={["hobbies"]}
-          rules={[{ required: true }]}
-        >
+        <Form.Item label="Hobbies" name={["hobbies"]} initialValue={[edit?.hobbiesName]}>
           <Select mode="multiple">
             {HOBBIES.map((el) => {
               return (
@@ -104,4 +102,4 @@ const UserForm: React.FC<UserFormProps> = ({ visible, onCreate, onCancel }) => {
   );
 };
 
-export default UserForm;
+export default EditUser;

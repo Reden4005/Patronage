@@ -4,16 +4,23 @@ import { useState, useRef, Key } from "react";
 import { Input, Space, Button, Table } from "antd";
 import { User } from "../types/types";
 import { ColumnType } from "antd/lib/table";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store/store";
+import { AppDispatch } from "../store/store";
+import { detailsVisibleActions } from "../store/detailsVisible-slice";
+import { editActions } from "../store/edit-slice";
+import { deletedActions } from "../store/delete-slice";
 
-const TableOfUsers = () => {
+const TableOfUsers: React.FC = () => {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
+  const dispatch = useDispatch<AppDispatch>();
+
   let searchInputRef = useRef<Input>(null);
   const actualListOfUsers = useSelector(
     (state: RootState) => state.listOfUsers.initialUsersLists
   );
+  const loading = useSelector((state: RootState) => state.spinner.visible);
   const getColumnSearchProps: (dataIndex: string) => ColumnType<User> = (
     dataIndex
   ) => ({
@@ -107,13 +114,14 @@ const TableOfUsers = () => {
     clearFilters();
     setSearchText("");
   };
-
+  
   const columns: ColumnType<User>[] = [
     {
       title: "Name",
       dataIndex: "name",
       key: "name",
       width: 80,
+      sorter: (a, b) => a.name.localeCompare(b.name),
       ...getColumnSearchProps("name"),
     },
     {
@@ -168,6 +176,7 @@ const TableOfUsers = () => {
       dataIndex: "address",
       key: "address",
       width: 150,
+      sorter: (a, b) => a.address.localeCompare(b.address),
       ...getColumnSearchProps("address"),
     },
     {
@@ -189,21 +198,49 @@ const TableOfUsers = () => {
       title: "Action",
       key: "action",
       render: (record) => (
-          <Space id={record.id}size="middle">
-          <Button id="details">Details</Button>
-          <Button id="delete">Delete</Button>
+        <>
+          <Space id={record.id} size="middle">
+            <Button
+              id="details"
+              onClick={() => {
+                dispatch(detailsVisibleActions.toggle(record));
+              }}
+            >
+              Detail
+            </Button>
+            <Button
+              id="delete"
+              onClick={() => {
+                dispatch(deletedActions.userToDelete(record));
+                dispatch(deletedActions.toggleVisibility());
+              }}
+            >
+              Delete
+            </Button>
+            <Button
+              id="edit"
+              onClick={() => {
+                dispatch(editActions.toggle(record));
+              }}
+            >
+              Edit
+            </Button>
           </Space>
+        </>
       ),
     },
   ];
 
   return (
-    <Table
-      columns={columns}
-      dataSource={actualListOfUsers}
-      rowKey="id"
-      bordered
-    />
+    <>
+      <Table
+        columns={columns}
+        dataSource={actualListOfUsers}
+        rowKey="id"
+        loading={loading}
+        bordered
+      />
+    </>
   );
 };
 

@@ -2,6 +2,7 @@ import { Form, Input, InputNumber, Select, DatePicker, Modal } from "antd";
 import HOBBIES from "../store/HOBBIES";
 import { User } from "../types/types";
 import { UserData } from "../types/types";
+import { generateId } from "../UI/idGenerator";
 
 const { Option } = Select;
 
@@ -27,11 +28,14 @@ const UserForm: React.FC<UserFormProps> = ({ visible, onCreate, onCancel }) => {
           .validateFields()
           .then((values) => {
             form.resetFields();
+            console.log(values)
             onCreate({
-              ...values,
+              ...values,   
+              id: generateId("user"),
               dateOfBirth: values["dateOfBirth"]
                 ? values["dateOfBirth"].format("YYYY-MM-DD")
                 : "",
+              hobbiesName: values["hobbies"].join(" ")
             });
           })
           .catch((info) => {

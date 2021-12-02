@@ -1,11 +1,11 @@
-import UserService from "../server/UsersService";
-import { AppDispatch } from "../store/store";
+import UsersDataBase from "../server/UsersDataBase";
+import { AppDispatch } from "./store";
 import { User } from "../types/types";
 import { listActions } from "./list-slice";
 import { spinnerActions } from "./spinner-slice";
 
 class ReduxUserService {
-  private service = new UserService();
+  private service = new UsersDataBase();
 
   loadUsers(dispatch: AppDispatch) {
     this.service

@@ -3,7 +3,7 @@ import { User } from "../types/types";
 import HOBBIES from "../store/HOBBIES";
 import USERS from "../store/USERS";
 
-class UserService {
+class UsersDataBase {
   constructor() {
     if (localStorage.getItem("currentUsersBase") == null) {
       localStorage.setItem("currentUsersBase", JSON.stringify(transformedUsers));
@@ -71,4 +71,4 @@ class UserService {
   }
 };
 
-export default UserService;
+export default UsersDataBase;

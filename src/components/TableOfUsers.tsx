@@ -9,7 +9,7 @@ import { RootState } from "../store/store";
 import { AppDispatch } from "../store/store";
 import { detailsVisibleActions } from "../store/detailsVisible-slice";
 import { editActions } from "../store/edit-slice";
-import { deletedActions } from "../store/delete-slice";
+import { listActions } from "../store/list-slice";
 
 const TableOfUsers: React.FC = () => {
   const [searchText, setSearchText] = useState("");
@@ -18,7 +18,7 @@ const TableOfUsers: React.FC = () => {
 
   let searchInputRef = useRef<Input>(null);
   const actualListOfUsers = useSelector(
-    (state: RootState) => state.listOfUsers.initialUsersLists
+    (state: RootState) => state.listOfUsers.usersLists
   );
   const loading = useSelector((state: RootState) => state.spinner.visible);
   const getColumnSearchProps: (dataIndex: string) => ColumnType<User> = (
@@ -211,8 +211,7 @@ const TableOfUsers: React.FC = () => {
             <Button
               id="delete"
               onClick={() => {
-                dispatch(deletedActions.userToDelete(record));
-                dispatch(deletedActions.toggleVisibility());
+                dispatch(listActions.toggleConfirmDelete(record));
               }}
             >
               Delete

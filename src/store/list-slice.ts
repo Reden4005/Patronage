@@ -1,17 +1,28 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { generateId } from "../UI/idGenerator";
 import { User } from "../types/types";
 
+interface State {
+  confirmDeleteIsVisible: boolean;
+  usersLists: User[];
+  userToDelete: User | null;
+  deletedUsers: User[];
+}
 const listSlice = createSlice({
   name: "usersList",
-  initialState: { initialUsersLists: new Array<User>() },
+  initialState: {
+    usersLists: new Array<User>(),
+    confirmDeleteIsVisible: false,
+    userToDelete: null,
+    deletedUsers: [],
+  } as State,
   reducers: {
     initializeState(state, action) {
-      state.initialUsersLists = (action.payload as User[])
+      state.usersLists = action.payload as User[];
     },
+
     addNewUser(state, action) {
-      state.initialUsersLists!.push({
-        id: generateId("user"),
+      state.usersLists.push({
+        id: action.payload.id,
         name: action.payload.name,
         lastName: action.payload.lastName,
         email: action.payload.email,
@@ -19,18 +30,28 @@ const listSlice = createSlice({
         gender: action.payload.gender,
         phoneNumber: action.payload.phoneNumber,
         address: action.payload.address,
-        dateOfBirth: action.payload.dateOfBirth
-          ? action.payload.dateOfBirth
-          : "",
+        dateOfBirth: action.payload.dateOfBirth,
         hobbies: action.payload.hobbies,
-        hobbiesName: action.payload.hobbies
-          ? action.payload.hobbies.join(" ")
-          : "",
+        hobbiesName: action.payload.hobbiesName,
       });
     },
-    removeUser(state, action) {
-      state.initialUsersLists.find((el) => el.id !== action.payload.id);
+
+    toggleConfirmDelete(state, action) {
+      state.confirmDeleteIsVisible = !state.confirmDeleteIsVisible;
+      state.userToDelete = action.payload;
     },
+
+    removeUser(state, action) {
+      console.log(action.payload);
+      const newState = state.usersLists.filter(
+        (el) => el.id !== action.payload
+      );
+      state.usersLists = newState;
+    },
+
+    deleteConfirmed(state, action) {
+      state.deletedUsers.push(action.payload);
+    }
   },
 });
 

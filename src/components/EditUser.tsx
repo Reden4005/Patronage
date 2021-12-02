@@ -16,7 +16,6 @@ interface UserFormProps {
 
 const EditUser: React.FC<UserFormProps> = ({ visible, onCreate, onCancel }) => {
   const edit = useSelector((state: RootState) => state.edit.edit);
-	console.log(edit, "edit")
   const [form] = Form.useForm<UserData>();
 
   return (

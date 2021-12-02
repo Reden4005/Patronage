@@ -11,34 +11,36 @@ import DetailsOfUser from "./components/DetailsOfUser";
 import EditUser from "./components/EditUser";
 import { editActions } from "./store/edit-slice";
 import {useEffect } from "react";
-import ReduxUserService from "./store/Service";
+import ReduxUserService from "./store/ReduxUserService";
 import PopupDeleteConfirmation from "./UI/PopupDeleteConfirmation";
-import { deletedActions } from "./store/delete-slice";
+import { listActions } from "./store/list-slice";
 
 const App: React.FC = () => {
-  const reduxUsersservice = new ReduxUserService();
+  
   const dispatch = useDispatch<AppDispatch>();
+  const reduxUsersService = new ReduxUserService();
   const inputIsVisible = useSelector((state: RootState) => state.form.visible);
   const detailsAreVisible = useSelector(
     (state: RootState) => state.details.visible
   );
-  const userIdToDelete = useSelector((state: RootState) => state.delete.deletedUser)
+  const userToDelete = useSelector((state: RootState) => state.listOfUsers.userToDelete);
   const editVisible = useSelector((state: RootState) => state.edit.visible);
-  const deletePopupIsVisible = useSelector((state: RootState) => state.delete.visible);
+  const deletePopupIsVisible = useSelector((state: RootState) => state.listOfUsers.confirmDeleteIsVisible);
 
   const deleteUser = () => {
-    reduxUsersservice.deleteUser(dispatch, userIdToDelete!.id);
-    dispatch(deletedActions.toggleVisibility());
+    reduxUsersService.deleteUser(dispatch, userToDelete!.id);
+    dispatch(listActions.toggleConfirmDelete(userToDelete));
+    dispatch(listActions.deleteConfirmed(userToDelete));
   }
 
   const onCreate = (values: User) => {
-    reduxUsersservice.addNewUser(dispatch, values);
+    reduxUsersService.addNewUser(dispatch, values);
     dispatch(formActions.toggle());
   };
 
   useEffect(() => {
-    reduxUsersservice.loadUsers(dispatch);
-  },[]);
+    reduxUsersService.loadUsers(dispatch);
+  }, []);
 
   return (
     <div>

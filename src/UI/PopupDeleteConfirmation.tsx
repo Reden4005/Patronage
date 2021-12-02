@@ -1,7 +1,7 @@
 import { Modal } from "antd";
 import { useSelector, useDispatch } from "react-redux";
-import { deletedActions } from "../store/delete-slice";
 import { AppDispatch, RootState } from "../store/store";
+import { listActions } from "../store/list-slice";
 
 interface myProps {
 	visible: boolean;
@@ -11,11 +11,11 @@ interface myProps {
 const PopupDeleteConfirmation: React.FC<myProps> = (props) => {
   const dispatch = useDispatch<AppDispatch>();
   const deletedUser = useSelector(
-    (state: RootState) => state.delete.deletedUser
+    (state: RootState) => state.listOfUsers.userToDelete
   );
 
   const handleCancel = () => {
-    dispatch(deletedActions.toggleVisibility());
+    dispatch(listActions.toggleConfirmDelete(null));
   };
 
   return (

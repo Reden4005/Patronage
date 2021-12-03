@@ -1,4 +1,4 @@
-import { Hobbie } from "../types/types";
+import { Hobbie } from "../types";
 
 const HOBBIES: Hobbie[] = [
   {

@@ -11,6 +11,7 @@ export interface UserData {
   address: string;
   dateOfBirth: moment.Moment;
   hobbies: string[];
+  hobbiesName?: string;
 };
 
 /** type User for data from base of users*/

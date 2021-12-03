@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { User } from "../types/types";
+import { User } from "../../types";
 
 interface State {
   confirmDeleteIsVisible: boolean;

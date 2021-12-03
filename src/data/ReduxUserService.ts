@@ -1,8 +1,8 @@
-import UsersDataBase from "../server/UsersDataBase";
+import UsersDataBase from "../services/UsersDataBase";
 import { AppDispatch } from "./store";
-import { User } from "../types/types";
-import { listActions } from "./list-slice";
-import { spinnerActions } from "./spinner-slice";
+import { User } from "../types";
+import { listActions } from "./Slices/list-slice";
+import { spinnerActions } from "./Slices/spinner-slice";
 
 class ReduxUserService {
   private service = new UsersDataBase();

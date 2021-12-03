@@ -1,40 +1,45 @@
-import { Form, Input, InputNumber, Select, DatePicker, Modal } from "antd";
-import HOBBIES from "../store/HOBBIES";
-import { User } from "../types/types";
-import { UserData } from "../types/types";
-import { useSelector } from "react-redux";
-import { RootState } from "../store/store";
-import moment from "moment";
+import { Form, Input, InputNumber, Select, Modal } from "antd";
+import HOBBIES from "../data/HOBBIES";
+import { User } from "../types";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, AppDispatch } from "../data/store";
+import { editActions } from "../data/Slices/edit-slice";
+import { useEffect } from "react";
 
 const { Option } = Select;
 
 interface UserFormProps {
   visible: boolean;
   onCreate: (values: User) => void;
-  onCancel: () => void;
 }
 
-const EditUser: React.FC<UserFormProps> = ({ visible, onCreate, onCancel }) => {
+const EditUser: React.FC<UserFormProps> = ({ visible, onCreate }) => {
   const edit = useSelector((state: RootState) => state.edit.edit);
-  const [form] = Form.useForm<UserData>();
+  const [form] = Form.useForm<User>();
+  const dispatch = useDispatch<AppDispatch>();
 
+  useEffect(() => {
+    form.setFieldsValue(edit!);
+    return () => {
+      form.resetFields();
+    };
+  }, [edit, form])
+   
   return (
     <Modal
       visible={visible}
+      getContainer={false}
       title="Edit a user"
       okText="Create"
       cancelText="Cancel"
-      onCancel={onCancel}
+      onCancel={() => dispatch(editActions.close())}
       onOk={() => {
         form
           .validateFields()
           .then((values) => {
             form.resetFields();
             onCreate({
-              ...values,
-              dateOfBirth: values["dateOfBirth"]
-                ? values["dateOfBirth"].format("YYYY-MM-DD")
-                : "",
+              ...values
             });
           })
           .catch((info) => {
@@ -48,44 +53,62 @@ const EditUser: React.FC<UserFormProps> = ({ visible, onCreate, onCancel }) => {
         name="form_in_modal"
         initialValues={{ modifier: "public" }}
       >
-        <Form.Item name={["name"]} label="Name" rules={[{ required: true }]} initialValue={edit?.name}>
+        <Form.Item
+          name={["name"]}
+          label="Name"
+          rules={[{ required: true }]}
+        >
           <Input />
         </Form.Item>
         <Form.Item
           name={["lastName"]}
           label="Last name"
           rules={[{ required: true }]}
-					initialValue={edit?.lastName}
         >
           <Input />
         </Form.Item>
-        <Form.Item name={["email"]} label="Email" rules={[{ type: "email" }]} initialValue={edit?.email}>
+        <Form.Item
+          name={["email"]}
+          label="Email"
+          rules={[{ type: "email" }]}
+        >
           <Input />
         </Form.Item>
         <Form.Item
           name={["age"]}
           label="Age"
           rules={[{ type: "number", min: 0, max: 99 }]}
-					initialValue={edit?.age}
         >
           <InputNumber />
         </Form.Item>
-        <Form.Item label="Gender" name={["gender"]} initialValue={edit?.gender}>
-          <Select >
+        <Form.Item label="Gender" name={["gender"]}>
+          <Select>
             <Option value="Male">Male</Option>
             <Option value="Female">Female</Option>
           </Select>
         </Form.Item>
-        <Form.Item name={["phoneNumber"]} label="phoneNumber" initialValue={edit?.phoneNumber}>
+        <Form.Item
+          name={["phoneNumber"]}
+          label="phoneNumber"
+        >
           <Input />
         </Form.Item>
-        <Form.Item name={["address"]} label="address" initialValue={edit?.address}>
+        <Form.Item
+          name={["address"]}
+          label="address"
+        >
           <Input />
         </Form.Item>
-        <Form.Item name={["dateOfBirth"]} label="Date of birth" initialValue={moment(edit?.dateOfBirth)}>
-          <DatePicker />
+        <Form.Item
+          name={["dateOfBirth"]}
+          label="Date of birth"
+        >
+          <Input />
         </Form.Item>
-        <Form.Item label="Hobbies" name={["hobbies"]} initialValue={[edit?.hobbiesName]}>
+        <Form.Item
+          label="Hobbies"
+          name={["hobbiesName"]}
+        >
           <Select mode="multiple">
             {HOBBIES.map((el) => {
               return (

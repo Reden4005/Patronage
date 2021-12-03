@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { User } from "../types/types";
+import { User } from "../../types";
 
 interface State {
   visible: boolean;
@@ -22,7 +22,7 @@ const editSlice = createSlice({
         address: action.payload.address,
         dateOfBirth: action.payload.dateOfBirth,
         hobbies: action.payload.hobbies,
-        hobbiesName: action.payload.hobbiesName,
+        hobbiesName: action.payload.hobbiesName.split(" "),
       };
     },
     close(state) {

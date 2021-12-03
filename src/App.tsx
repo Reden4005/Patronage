@@ -2,18 +2,17 @@ import Header from "./components/Header";
 import "antd/dist/antd.css";
 import UserForm from "./components/UserInput";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState, AppDispatch } from "./store/store";
-import { formActions } from "./store/form-slice";
-import { detailsVisibleActions } from "./store/detailsVisible-slice";
-import { User } from "./types/types";
-import TableOfUsers from "./components/TableOfUsers";
+import { RootState, AppDispatch } from "./data/store";
+import { formActions } from "./data/Slices/form-slice";
+import { detailsVisibleActions } from "./data/Slices/detailsVisible-slice";
+import { User } from "./types";
+import TableOfUsers from "./components/Table/TableOfUsers";
 import DetailsOfUser from "./components/DetailsOfUser";
 import EditUser from "./components/EditUser";
-import { editActions } from "./store/edit-slice";
 import {useEffect } from "react";
-import ReduxUserService from "./store/ReduxUserService";
-import PopupDeleteConfirmation from "./UI/PopupDeleteConfirmation";
-import { listActions } from "./store/list-slice";
+import ReduxUserService from "./data/ReduxUserService";
+import PopupDeleteConfirmation from "./components/PopupDeleteConfirmation";
+import { listActions } from "./data/Slices/list-slice";
 
 const App: React.FC = () => {
   
@@ -23,6 +22,7 @@ const App: React.FC = () => {
   const detailsAreVisible = useSelector(
     (state: RootState) => state.details.visible
   );
+
   const userToDelete = useSelector((state: RootState) => state.listOfUsers.userToDelete);
   const editVisible = useSelector((state: RootState) => state.edit.visible);
   const deletePopupIsVisible = useSelector((state: RootState) => state.listOfUsers.confirmDeleteIsVisible);
@@ -60,12 +60,10 @@ const App: React.FC = () => {
       />
       <EditUser
         visible={editVisible}
-        onCancel={() => dispatch(editActions.close())}
         onCreate={() => console.log("create")}
       />
       <PopupDeleteConfirmation visible={deletePopupIsVisible} deleteUser={deleteUser}/>
       <TableOfUsers />
-      
     </div>
   );
 };

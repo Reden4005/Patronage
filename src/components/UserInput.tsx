@@ -1,8 +1,8 @@
 import { Form, Input, InputNumber, Select, DatePicker, Modal } from "antd";
-import HOBBIES from "../store/HOBBIES";
-import { User } from "../types/types";
-import { UserData } from "../types/types";
-import { generateId } from "../UI/idGenerator";
+import HOBBIES from "../data/HOBBIES";
+import { User } from "../types";
+import { UserData } from "../types";
+import { generateId } from "../Utils/idGenerator";
 
 const { Option } = Select;
 
@@ -28,14 +28,14 @@ const UserForm: React.FC<UserFormProps> = ({ visible, onCreate, onCancel }) => {
           .validateFields()
           .then((values) => {
             form.resetFields();
-            console.log(values)
+            console.log(values);
             onCreate({
-              ...values,   
+              ...values,
               id: generateId("user"),
               dateOfBirth: values["dateOfBirth"]
                 ? values["dateOfBirth"].format("YYYY-MM-DD")
                 : "",
-              hobbiesName: values["hobbies"].join(" ")
+              hobbiesName: values["hobbies"].join(" "),
             });
           })
           .catch((info) => {
@@ -80,7 +80,9 @@ const UserForm: React.FC<UserFormProps> = ({ visible, onCreate, onCancel }) => {
           </Select>
         </Form.Item>
         <Form.Item name={["phoneNumber"]} label="phoneNumber">
-          <Input />
+          <Input
+            placeholder="+1 (234) 567-8910"
+          />
         </Form.Item>
         <Form.Item name={["address"]} label="address">
           <Input />

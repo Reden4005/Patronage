@@ -13,14 +13,3 @@ body {
 .details {
   font-weight: bold;
 }
-
-.header {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	margin: 2vw;
-}
-
-.header button {
-	margin-right: 2vw;
-}

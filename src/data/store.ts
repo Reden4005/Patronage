@@ -1,9 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import formSlice from "./form-slice";
-import listSlice from "./list-slice";
-import detailsVisibilitySlice from "./detailsVisible-slice";
-import spinnerSlice from "./spinner-slice";
-import editSlice from "./edit-slice";
+import formSlice from "./Slices/form-slice";
+import listSlice from "./Slices/list-slice";
+import detailsVisibilitySlice from "./Slices/detailsVisible-slice";
+import spinnerSlice from "./Slices/spinner-slice";
+import editSlice from "./Slices/edit-slice";
 
 const store = configureStore({
   reducer: {

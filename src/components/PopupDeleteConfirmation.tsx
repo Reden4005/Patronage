@@ -1,7 +1,7 @@
 import { Modal } from "antd";
 import { useSelector, useDispatch } from "react-redux";
-import { AppDispatch, RootState } from "../store/store";
-import { listActions } from "../store/list-slice";
+import { AppDispatch, RootState } from "../data/store";
+import { listActions } from "../data/Slices/list-slice";
 
 interface myProps {
 	visible: boolean;

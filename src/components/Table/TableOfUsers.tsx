@@ -2,6 +2,7 @@ import { Table } from "antd";
 import { useSelector } from "react-redux";
 import { RootState } from "../../data/store";
 import Columns from "./Columns";
+import RowSelection from "./RowSelection";
 
 const TableOfUsers: React.FC = () => {
   const actualListOfUsers = useSelector(
@@ -15,6 +16,10 @@ const TableOfUsers: React.FC = () => {
         columns={Columns()}
         dataSource={actualListOfUsers}
         rowKey="id"
+        rowSelection={{
+          type: "checkbox",
+          ...RowSelection(),
+        }}
         loading={loading}
         bordered
       />

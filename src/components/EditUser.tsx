@@ -26,7 +26,7 @@ const EditUser: React.FC<UserFormProps> = ({ visible, onCreate }) => {
   }, [edit, form])
    
   return (
-    <Modal
+    <Modal forceRender
       visible={visible}
       getContainer={false}
       title="Edit a user"

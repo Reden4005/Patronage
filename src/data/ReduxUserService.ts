@@ -44,6 +44,19 @@ class ReduxUserService {
     })
     .catch(err => console.log(err))
   }
+
+  deleteMultipleUsers(dispatch: AppDispatch, value: User[]) {
+    dispatch(spinnerActions.toggle());
+    this.service
+      .deleteMultipleUsersFromdataBase(value)
+      .then(() => {
+        setTimeout(() => {
+          dispatch(listActions.removeMultipleUsers(value));
+          dispatch(spinnerActions.toggle());
+        }, 1000);
+      })
+      .catch((err) => console.log(err));
+  }
 }
 
 export default ReduxUserService;

@@ -1,19 +1,31 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { User } from "../../types";
-import { AppDispatch } from "../../data/store";
+import { AppDispatch, RootState } from "../../data/store";
 import { listActions } from "../../data/Slices/list-slice";
+import React, { useState } from "react";
+import { bulkDeleteActions } from "../../data/Slices/bulkDelete-slice";
 
 const RowSelection = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const [selectedRows, setSelectedRows] = useState([] as User[]);
+
+  const selectedRowKeys = useSelector(
+    (state: RootState) => state.bulkDeleteKeys.keys
+  );
+  
+  const onSelectedChange = (
+    selectedRowKeys: React.Key[],
+    selectedRows: User[]
+  ) => {
+    setSelectedRows(selectedRows);
+    dispatch(listActions.bulkDeleteData(selectedRows));
+    dispatch(bulkDeleteActions.addKeys(selectedRowKeys));
+  };
 
   const rowSelection = {
-    onChange: (selectedRowKeys: React.Key[], selectedRows: User[]) => {
-      dispatch(listActions.bulkDeleteData(selectedRows));
-    },
-    getCheckboxProps: (record: User) => ({
-      disabled: record.id === "Disabled User",
-      name: record.id,
-    }),
+    selectedRows,
+    selectedRowKeys,
+    onChange: onSelectedChange,
   };
   return rowSelection;
 };

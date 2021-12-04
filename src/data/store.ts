@@ -4,14 +4,16 @@ import listSlice from "./Slices/list-slice";
 import detailsVisibilitySlice from "./Slices/detailsVisible-slice";
 import spinnerSlice from "./Slices/spinner-slice";
 import editSlice from "./Slices/edit-slice";
+import bulkDeleteSlice from "./Slices/bulkDelete-slice";
 
 const store = configureStore({
   reducer: {
     form: formSlice.reducer,
     listOfUsers: listSlice.reducer,
     details: detailsVisibilitySlice.reducer,
-		spinner: spinnerSlice.reducer,
-		edit: editSlice.reducer,
+    spinner: spinnerSlice.reducer,
+    edit: editSlice.reducer,
+    bulkDeleteKeys: bulkDeleteSlice.reducer,
   },
 });
 

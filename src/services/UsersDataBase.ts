@@ -65,6 +65,24 @@ class UsersDataBase {
     })
   }
 
+  deleteMultipleUsersFromdataBase(value: User[]) {
+    const usersToDel = value;
+    const setWithDEleteUsers = new Set();
+
+    for (let i = 0; i < usersToDel.length; i++) {
+      setWithDEleteUsers.add(usersToDel[i].id);
+    }
+    const actualList: User[] = JSON.parse(
+      localStorage.getItem("currentUsersBase") as string
+    );
+    const filtered = actualList.filter(
+      (user) => !setWithDEleteUsers.has(user.id)
+    );
+    localStorage.setItem("currentUsersBase", JSON.stringify(filtered));
+    return new Promise((resolve, reject) => {
+      resolve("Users deleted");
+    });
+  }
   initialUsersBase() {
     localStorage.clear();
   }

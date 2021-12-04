@@ -2,7 +2,7 @@ import { Form, Input, InputNumber, Select, DatePicker, Modal } from "antd";
 import HOBBIES from "../data/HOBBIES";
 import { User } from "../types";
 import { UserData } from "../types";
-import { generateId } from "../Utils/idGenerator";
+import { generateId } from "../utils/idGenerator";
 
 const { Option } = Select;
 

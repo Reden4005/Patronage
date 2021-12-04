@@ -11,10 +11,11 @@ import DetailsOfUser from "./components/DetailsOfUser";
 import EditUser from "./components/EditUser";
 import { useEffect } from "react";
 import ReduxUserService from "./data/ReduxUserService";
-import PopupDeleteConfirmation from "./components/PopupDeleteConfirmation";
+import DeletePopup from "./components/DeletePopup";
 import { listActions } from "./data/Slices/list-slice";
 import { editActions } from "./data/Slices/edit-slice";
-import PopupBulkDeleteConfirmation from "./components/PopupBulkDeleteConfirmation";
+import BulkDeletePopup from "./components/BulkDeletePopup";
+import { bulkDeleteActions } from "./data/Slices/bulkDelete-slice";
 
 const App: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -26,6 +27,9 @@ const App: React.FC = () => {
   const bulkDeletePopupVisible = useSelector((state: RootState) => state.listOfUsers.confirmBulkDeleteIsVisible);
   const userToDelete = useSelector(
     (state: RootState) => state.listOfUsers.userToDelete
+  );
+  const deletedUsers = useSelector(
+    (state: RootState) => state.listOfUsers.usersToDelete
   );
   const editVisible = useSelector((state: RootState) => state.edit.visible);
   const deletePopupIsVisible = useSelector(
@@ -39,10 +43,6 @@ const App: React.FC = () => {
     dispatch(listActions.deleteConfirmed(userToDelete));
   };
 
-  const usersToDelete = () => {
-
-  }
-
   const onCreate = (values: User) => {
     reduxUsersService.addNewUser(dispatch, values);
     dispatch(formActions.toggle());
@@ -53,6 +53,13 @@ const App: React.FC = () => {
     reduxUsersService.deleteUser(dispatch, editedUserId as string);
     reduxUsersService.addNewUser(dispatch, editedUser);
     dispatch(editActions.close());
+  };
+
+  const deleteUsers = () => {
+    dispatch(listActions.bulkDeleteIsVisible());
+    dispatch(bulkDeleteActions.clear());
+    dispatch(listActions.removeMultipleUsers(deletedUsers));
+    reduxUsersService.deleteMultipleUsers(dispatch, deletedUsers as User[]);
   };
 
   useEffect(() => {
@@ -76,11 +83,10 @@ const App: React.FC = () => {
         }}
       />
       <EditUser visible={editVisible} onCreate={onEdit} />
-      <PopupDeleteConfirmation
-        visible={deletePopupIsVisible}
-        deleteUser={deleteUser}
+      <DeletePopup visible={deletePopupIsVisible} deleteUser={deleteUser} />
+      <BulkDeletePopup
+        visible={bulkDeletePopupVisible} onOk={deleteUsers}
       />
-      <PopupBulkDeleteConfirmation visible={bulkDeletePopupVisible} deleteUsers={usersToDelete}/>
       <TableOfUsers />
     </div>
   );

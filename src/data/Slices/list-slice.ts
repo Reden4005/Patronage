@@ -52,23 +52,31 @@ const listSlice = createSlice({
       state.usersLists = filtered;
     },
 
+    removeMultipleUsers(state, action) {
+      const usersToDel = action.payload as User[];
+      const setWithDEleteUsers = new Set();
+
+      for ( let i = 0; i < usersToDel.length; i++) {
+        setWithDEleteUsers.add(usersToDel[i].id)
+      }
+
+      const filtered = state.usersLists.filter(user => !setWithDEleteUsers.has(user.id))
+      state.usersLists = filtered;
+      for (let i = 0; i < usersToDel.length; i++) {
+        state.deletedUsers.push(usersToDel[i]);
+      }
+    },
+
     deleteConfirmed(state, action) {
       state.deletedUsers.push(action.payload);
     },
 
-    toggleConfirmBulkDelete(state) {
+    bulkDeleteIsVisible(state) {
       state.confirmBulkDeleteIsVisible = !state.confirmBulkDeleteIsVisible;
     },
 
     bulkDeleteData(state, action) {
       state.usersToDelete= action.payload;
-    },
-
-    bulkDeleteConfirmed(state, action) {
-      const deleted = action.payload as User[];
-      deleted.forEach((el) => {
-        state.deletedUsers.push(el)});
-      state.usersToDelete = [];
     },
   },
 });

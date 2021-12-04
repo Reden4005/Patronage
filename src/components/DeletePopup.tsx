@@ -8,7 +8,7 @@ interface myProps {
   deleteUser: () => void;
 }
 
-const PopupDeleteConfirmation: React.FC<myProps> = (props) => {
+const DeletePopup: React.FC<myProps> = (props) => {
   const dispatch = useDispatch<AppDispatch>();
   const deletedUser = useSelector(
     (state: RootState) => state.listOfUsers.userToDelete
@@ -32,4 +32,4 @@ const PopupDeleteConfirmation: React.FC<myProps> = (props) => {
   );
 };
 
-export default PopupDeleteConfirmation;
+export default DeletePopup;

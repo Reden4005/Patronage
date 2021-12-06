@@ -1,11 +1,11 @@
 import { User } from "../types";
-import HOBBIES from "../data/HOBBIES";
-import USERS from "../data/USERS";
+import USERS from "./USERS";
 
 class UsersDataBase {
+  static readonly USERBASE_KEY = "currentUsersBase";
   constructor() {
-    if (localStorage.getItem("currentUsersBase") == null) {
-      localStorage.setItem("currentUsersBase", JSON.stringify(USERS));
+    if (localStorage.getItem(UsersDataBase.USERBASE_KEY) == null) {
+      localStorage.setItem(UsersDataBase.USERBASE_KEY, JSON.stringify(USERS));
     }
     if (localStorage.getItem("initialUsersBase") == null) {
       localStorage.setItem("initialUsersBase", JSON.stringify(USERS));
@@ -14,90 +14,51 @@ class UsersDataBase {
     if (localStorage.getItem("deleteUsers") == null) {
       localStorage.setItem("deletedUsers", JSON.stringify([]));
     }
+  }
 
-    if (localStorage.getItem("hobbies") == null) {
-      localStorage.setItem("hobbies", JSON.stringify(HOBBIES));
+  get(base: "initialUsersBase" | "currentUsersBase") {
+    const users: User[] = JSON.parse(localStorage.getItem(base) as string);
+
+    if (base === "initialUsersBase") {
+      localStorage.setItem(UsersDataBase.USERBASE_KEY, JSON.stringify(users));
     }
+    return new Promise<User[]>((resolve, reject) => resolve(users));
   }
 
-  loadUsers(base: "initial" | "current") {
-    const choosenBase =
-      base === "initial" ? "initialUsersBase" : "currentUsersBase";
-    let map = new Map();
-
-    JSON.parse(localStorage.getItem("hobbies") as string).forEach(
-      (el: { id: string; name: string }) => {
-        map.set(el.id, el);
-      }
-    );
-
-    const rawUsers: User[] = JSON.parse(
-      localStorage.getItem(choosenBase) as string
-    );
-    const transformedUsers = rawUsers.map<User>((user) => {
-      let mappedHobbies = [];
-
-      for (let i = 0; i < user.hobbies.length; i++) {
-        const hobbiesString = map.get(user.hobbies[i]);
-        if (hobbiesString != null) mappedHobbies.push(hobbiesString.name);
-      }
-
-      return {
-        ...user,
-        hobbiesName: mappedHobbies.join(" "),
-      };
-    });
-    return new Promise((resolve, reject) => resolve(transformedUsers));
-  }
-
-  addUserToDataBase(user: User) {
+  post(user: User) {
     const actualList = JSON.parse(
-      localStorage.getItem("currentUsersBase") as string
+      localStorage.getItem(UsersDataBase.USERBASE_KEY) as string
     );
     actualList.push(user);
-    localStorage.setItem("currentUsersBase", JSON.stringify(actualList));
+    localStorage.setItem(
+      UsersDataBase.USERBASE_KEY,
+      JSON.stringify(actualList)
+    );
     return new Promise((resolve, reject) => {
       resolve("User saved");
     });
   }
 
-  deleleteUserFromDataBase(id: string) {
+  delete(id: string) {
     const actualList: User[] = JSON.parse(
-      localStorage.getItem("currentUsersBase") as string
+      localStorage.getItem(UsersDataBase.USERBASE_KEY) as string
     );
     const filtered = actualList.filter((el) => el.id !== id);
-    localStorage.setItem("currentUsersBase", JSON.stringify(filtered));
+    localStorage.setItem(UsersDataBase.USERBASE_KEY, JSON.stringify(filtered));
     return new Promise((resolve, reject) => {
       resolve("User deleted");
     });
   }
 
-  deleteMultipleUsersFromdataBase(value: User[]) {
-    const usersToDel = value;
-    const setWithDEleteUsers = new Set();
-
-    for (let i = 0; i < usersToDel.length; i++) {
-      setWithDEleteUsers.add(usersToDel[i].id);
-    }
+  update(values: User, id: string) {
     const actualList: User[] = JSON.parse(
-      localStorage.getItem("currentUsersBase") as string
+      localStorage.getItem(UsersDataBase.USERBASE_KEY) as string
     );
-    const filtered = actualList.filter(
-      (user) => !setWithDEleteUsers.has(user.id)
-    );
-    localStorage.setItem("currentUsersBase", JSON.stringify(filtered));
+    const filtered = actualList.filter((el) => el.id !== id);
+    filtered.push({ ...values, id: id });
+    localStorage.setItem(UsersDataBase.USERBASE_KEY, JSON.stringify(filtered));
     return new Promise((resolve, reject) => {
-      resolve("Users deleted");
-    });
-  }
-
-  initialUsersBase() {
-    const actualList: User[] = JSON.parse(
-      localStorage.getItem("initialUsersBase") as string
-    );
-    localStorage.setItem("currentUsersBase", JSON.stringify(actualList));
-    return new Promise((resolve, reject) => {
-      resolve("Initial base set");
+      resolve("User's data changed");
     });
   }
 }

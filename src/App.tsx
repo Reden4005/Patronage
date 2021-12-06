@@ -17,18 +17,25 @@ import BulkDeletePopup from "./components/BulkDeletePopup";
 import { bulkDeleteActions } from "./data/Slices/bulkDelete-slice";
 import InitialStatePopup from "./components/InitialStatePopup";
 import { initialStateActions } from "./data/Slices/initialState-slice";
+import ReduxHobbiesService from "./data/ReduxHobbiesService";
 
 const App: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const reduxUsersService = new ReduxUserService();
-   const initializeBase = useSelector(
-     (state: RootState) => state.listOfUsers.usersLists
-   );
+  const initializeBase = useSelector(
+    (state: RootState) => state.listOfUsers.usersLists
+  );
+  const hobbies = useSelector((state: RootState) => state.hobbies.hobbies);
+  const initializeHobbies = useSelector(
+    (state: RootState) => state.hobbies.hobbies
+  );
   const inputIsVisible = useSelector((state: RootState) => state.form.visible);
   const detailsAreVisible = useSelector(
     (state: RootState) => state.details.visible
   );
-  const bulkDeletePopupVisible = useSelector((state: RootState) => state.listOfUsers.confirmBulkDeleteIsVisible);
+  const bulkDeletePopupVisible = useSelector(
+    (state: RootState) => state.listOfUsers.confirmBulkDeleteIsVisible
+  );
   const userToDelete = useSelector(
     (state: RootState) => state.listOfUsers.userToDelete
   );
@@ -39,8 +46,10 @@ const App: React.FC = () => {
   const deletePopupIsVisible = useSelector(
     (state: RootState) => state.listOfUsers.confirmDeleteIsVisible
   );
-  const editedUserId = useSelector((state: RootState) => state.edit.edit?.id)
-  const initialStateIsVisible = useSelector((state: RootState) => state.initialState.visible);
+  const editedUserId = useSelector((state: RootState) => state.edit.edit?.id);
+  const initialStateIsVisible = useSelector(
+    (state: RootState) => state.initialState.visible
+  );
 
   const deleteUser = () => {
     reduxUsersService.deleteUser(dispatch, userToDelete!.id);
@@ -54,9 +63,12 @@ const App: React.FC = () => {
   };
 
   const onEdit = (values: User) => {
-    const editedUser: User = {...values, id: editedUserId as string};
-    reduxUsersService.deleteUser(dispatch, editedUserId as string);
-    reduxUsersService.addNewUser(dispatch, editedUser);
+    const editedUser: User = { ...values, id: editedUserId as string };
+    reduxUsersService.editUserData(
+      dispatch,
+      editedUser,
+      editedUserId as string
+    );
     dispatch(editActions.close());
   };
 
@@ -69,11 +81,13 @@ const App: React.FC = () => {
 
   const restoreInitialState = () => {
     reduxUsersService.restoreInitialState(dispatch);
-    dispatch(initialStateActions.toggle())
+    dispatch(initialStateActions.toggle());
+  };
+  if (initializeHobbies.length === 0) {
+    ReduxHobbiesService();
   }
-
   if (initializeBase.length === 0) {
-    reduxUsersService.loadUsers(dispatch);
+    reduxUsersService.loadUsers(dispatch, hobbies);
   }
 
   return (
@@ -95,7 +109,10 @@ const App: React.FC = () => {
       <EditUser visible={editVisible} onCreate={onEdit} />
       <DeletePopup visible={deletePopupIsVisible} deleteUser={deleteUser} />
       <BulkDeletePopup visible={bulkDeletePopupVisible} onOk={deleteUsers} />
-      <InitialStatePopup visible={initialStateIsVisible} restoreInitialState={restoreInitialState} />
+      <InitialStatePopup
+        visible={initialStateIsVisible}
+        restoreInitialState={restoreInitialState}
+      />
       <TableOfUsers />
     </div>
   );

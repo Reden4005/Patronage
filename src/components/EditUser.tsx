@@ -1,5 +1,4 @@
 import { Form, Input, InputNumber, Select, Modal } from "antd";
-import HOBBIES from "../data/HOBBIES";
 import { User } from "../types";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../data/store";
@@ -17,7 +16,7 @@ const EditUser: React.FC<UserFormProps> = ({ visible, onCreate }) => {
   const edit = useSelector((state: RootState) => state.edit.edit);
   const [form] = Form.useForm<User>();
   const dispatch = useDispatch<AppDispatch>();
-
+  const hobbies = useSelector((state: RootState) => state.hobbies.hobbies);
   useEffect(() => {
     form.setFieldsValue(edit!);
     return () => {
@@ -39,7 +38,7 @@ const EditUser: React.FC<UserFormProps> = ({ visible, onCreate }) => {
           .then((values) => {
             form.resetFields();
             onCreate({
-              ...values
+              ...values,
             });
           })
           .catch((info) => {
@@ -110,7 +109,7 @@ const EditUser: React.FC<UserFormProps> = ({ visible, onCreate }) => {
           name={["hobbiesName"]}
         >
           <Select mode="multiple">
-            {HOBBIES.map((el) => {
+            {hobbies.map((el) => {
               return (
                 <Option key={el.id} value={el.name}>
                   {el.name}

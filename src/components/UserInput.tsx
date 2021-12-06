@@ -1,8 +1,9 @@
 import { Form, Input, InputNumber, Select, DatePicker, Modal } from "antd";
-import HOBBIES from "../data/HOBBIES";
 import { User } from "../types";
 import { UserData } from "../types";
 import { v4 as uuidv4 } from "uuid";
+import { useSelector } from "react-redux";
+import { RootState } from "../data/store";
 
 const { Option } = Select;
 
@@ -13,9 +14,8 @@ interface UserFormProps {
 }
 
 const UserForm: React.FC<UserFormProps> = ({ visible, onCreate, onCancel }) => {
-  //////typ <>
   const [form] = Form.useForm<UserData>();
-
+  const hobbies = useSelector((state: RootState) => state.hobbies.hobbies);
   return (
     <Modal
       visible={visible}
@@ -80,9 +80,7 @@ const UserForm: React.FC<UserFormProps> = ({ visible, onCreate, onCancel }) => {
           </Select>
         </Form.Item>
         <Form.Item name={["phoneNumber"]} label="phoneNumber">
-          <Input
-            placeholder="+1 (234) 567-8910"
-          />
+          <Input placeholder="+1 (234) 567-8910" />
         </Form.Item>
         <Form.Item name={["address"]} label="address">
           <Input />
@@ -96,7 +94,7 @@ const UserForm: React.FC<UserFormProps> = ({ visible, onCreate, onCancel }) => {
           rules={[{ required: true }]}
         >
           <Select mode="multiple">
-            {HOBBIES.map((el) => {
+            {hobbies.map((el) => {
               return (
                 <Option key={el.id} value={el.name}>
                   {el.name}

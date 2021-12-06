@@ -9,17 +9,21 @@ import { User } from "./types";
 import TableOfUsers from "./components/Table/TableOfUsers";
 import DetailsOfUser from "./components/DetailsOfUser";
 import EditUser from "./components/EditUser";
-import { useEffect } from "react";
 import ReduxUserService from "./data/ReduxUserService";
 import DeletePopup from "./components/DeletePopup";
 import { listActions } from "./data/Slices/list-slice";
 import { editActions } from "./data/Slices/edit-slice";
 import BulkDeletePopup from "./components/BulkDeletePopup";
 import { bulkDeleteActions } from "./data/Slices/bulkDelete-slice";
+import InitialStatePopup from "./components/InitialStatePopup";
+import { initialStateActions } from "./data/Slices/initialState-slice";
 
 const App: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const reduxUsersService = new ReduxUserService();
+   const initializeBase = useSelector(
+     (state: RootState) => state.listOfUsers.usersLists
+   );
   const inputIsVisible = useSelector((state: RootState) => state.form.visible);
   const detailsAreVisible = useSelector(
     (state: RootState) => state.details.visible
@@ -36,6 +40,7 @@ const App: React.FC = () => {
     (state: RootState) => state.listOfUsers.confirmDeleteIsVisible
   );
   const editedUserId = useSelector((state: RootState) => state.edit.edit?.id)
+  const initialStateIsVisible = useSelector((state: RootState) => state.initialState.visible);
 
   const deleteUser = () => {
     reduxUsersService.deleteUser(dispatch, userToDelete!.id);
@@ -62,9 +67,14 @@ const App: React.FC = () => {
     reduxUsersService.deleteMultipleUsers(dispatch, deletedUsers as User[]);
   };
 
-  useEffect(() => {
+  const restoreInitialState = () => {
+    reduxUsersService.restoreInitialState(dispatch);
+    dispatch(initialStateActions.toggle())
+  }
+
+  if (initializeBase.length === 0) {
     reduxUsersService.loadUsers(dispatch);
-  }, []);
+  }
 
   return (
     <div>
@@ -84,9 +94,8 @@ const App: React.FC = () => {
       />
       <EditUser visible={editVisible} onCreate={onEdit} />
       <DeletePopup visible={deletePopupIsVisible} deleteUser={deleteUser} />
-      <BulkDeletePopup
-        visible={bulkDeletePopupVisible} onOk={deleteUsers}
-      />
+      <BulkDeletePopup visible={bulkDeletePopupVisible} onOk={deleteUsers} />
+      <InitialStatePopup visible={initialStateIsVisible} restoreInitialState={restoreInitialState} />
       <TableOfUsers />
     </div>
   );

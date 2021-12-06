@@ -78,6 +78,11 @@ const listSlice = createSlice({
     bulkDeleteData(state, action) {
       state.usersToDelete= action.payload;
     },
+
+    clearState(state) {
+      state.usersLists = new Array<User>();
+      state.deletedUsers = [];
+    }
   },
 });
 

@@ -6,10 +6,17 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   box-sizing: border-box;
-  --primary-dark-color: black;
-  --primary-light-color: white;
+  
 }
 
 .details {
   font-weight: bold;
+}
+
+:root {
+  margin: 20px;
+}
+
+.ant-table-tbody {
+  background: #FFFFFA;
 }

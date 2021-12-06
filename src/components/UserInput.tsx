@@ -2,7 +2,7 @@ import { Form, Input, InputNumber, Select, DatePicker, Modal } from "antd";
 import HOBBIES from "../data/HOBBIES";
 import { User } from "../types";
 import { UserData } from "../types";
-import { generateId } from "../utils/idGenerator";
+import { v4 as uuidv4 } from "uuid";
 
 const { Option } = Select;
 
@@ -31,7 +31,7 @@ const UserForm: React.FC<UserFormProps> = ({ visible, onCreate, onCancel }) => {
             console.log(values);
             onCreate({
               ...values,
-              id: generateId("user"),
+              id: uuidv4(),
               dateOfBirth: values["dateOfBirth"]
                 ? values["dateOfBirth"].format("YYYY-MM-DD")
                 : "",

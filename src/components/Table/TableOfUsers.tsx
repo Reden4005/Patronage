@@ -15,11 +15,13 @@ const TableOfUsers: React.FC = () => {
       <Table
         columns={Columns()}
         dataSource={actualListOfUsers}
+        tableLayout="auto"
         rowKey="id"
         rowSelection={{
           type: "checkbox",
           ...RowSelection(),
         }}
+        style={{ width: "97%" }}
         loading={loading}
         bordered
       />

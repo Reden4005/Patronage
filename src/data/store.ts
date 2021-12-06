@@ -5,6 +5,7 @@ import detailsVisibilitySlice from "./Slices/detailsVisible-slice";
 import spinnerSlice from "./Slices/spinner-slice";
 import editSlice from "./Slices/edit-slice";
 import bulkDeleteSlice from "./Slices/bulkDelete-slice";
+import initialStateSlice from "./Slices/initialState-slice";
 
 const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ const store = configureStore({
     spinner: spinnerSlice.reducer,
     edit: editSlice.reducer,
     bulkDeleteKeys: bulkDeleteSlice.reducer,
+    initialState: initialStateSlice.reducer
   },
 });
 

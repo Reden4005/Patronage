@@ -57,6 +57,16 @@ class ReduxUserService {
       })
       .catch((err) => console.log(err));
   }
+
+  restoreInitialState(dispatch: AppDispatch) {
+    dispatch(spinnerActions.toggle());
+    dispatch(listActions.clearState());
+    this.service.initialUsersBase().then(() => {
+       setTimeout(() => {
+         dispatch(spinnerActions.toggle());
+       }, 1000);
+    });
+  }
 }
 
 export default ReduxUserService;

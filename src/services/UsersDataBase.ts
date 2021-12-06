@@ -7,7 +7,7 @@ class UsersDataBase {
     if (localStorage.getItem("currentUsersBase") == null) {
       localStorage.setItem("currentUsersBase", JSON.stringify(USERS));
     }
-		if (localStorage.getItem("initialUsersBase") == null) {
+    if (localStorage.getItem("initialUsersBase") == null) {
       localStorage.setItem("initialUsersBase", JSON.stringify(USERS));
     }
 
@@ -20,15 +20,20 @@ class UsersDataBase {
     }
   }
 
-  loadUsers (base: "initial" | "current") {
-    const choosenBase = base === "initial" ? "initialUsersBase" : "currentUsersBase";
-		let map = new Map();
+  loadUsers(base: "initial" | "current") {
+    const choosenBase =
+      base === "initial" ? "initialUsersBase" : "currentUsersBase";
+    let map = new Map();
 
-    JSON.parse(localStorage.getItem("hobbies") as string).forEach((el: {id: string, name: string}) => {
-      map.set(el.id, el);
-    });
+    JSON.parse(localStorage.getItem("hobbies") as string).forEach(
+      (el: { id: string; name: string }) => {
+        map.set(el.id, el);
+      }
+    );
 
-		const rawUsers: User[] = JSON.parse(localStorage.getItem(choosenBase) as string);
+    const rawUsers: User[] = JSON.parse(
+      localStorage.getItem(choosenBase) as string
+    );
     const transformedUsers = rawUsers.map<User>((user) => {
       let mappedHobbies = [];
 
@@ -41,17 +46,19 @@ class UsersDataBase {
         ...user,
         hobbiesName: mappedHobbies.join(" "),
       };
-    }); 
-		return new Promise((resolve, reject) => resolve(transformedUsers));
-	}
+    });
+    return new Promise((resolve, reject) => resolve(transformedUsers));
+  }
 
   addUserToDataBase(user: User) {
-    const actualList = JSON.parse(localStorage.getItem("currentUsersBase") as string);
+    const actualList = JSON.parse(
+      localStorage.getItem("currentUsersBase") as string
+    );
     actualList.push(user);
     localStorage.setItem("currentUsersBase", JSON.stringify(actualList));
     return new Promise((resolve, reject) => {
       resolve("User saved");
-    })
+    });
   }
 
   deleleteUserFromDataBase(id: string) {
@@ -61,8 +68,8 @@ class UsersDataBase {
     const filtered = actualList.filter((el) => el.id !== id);
     localStorage.setItem("currentUsersBase", JSON.stringify(filtered));
     return new Promise((resolve, reject) => {
-      resolve("User deleted")
-    })
+      resolve("User deleted");
+    });
   }
 
   deleteMultipleUsersFromdataBase(value: User[]) {
@@ -83,9 +90,16 @@ class UsersDataBase {
       resolve("Users deleted");
     });
   }
+
   initialUsersBase() {
-    localStorage.clear();
+    const actualList: User[] = JSON.parse(
+      localStorage.getItem("initialUsersBase") as string
+    );
+    localStorage.setItem("currentUsersBase", JSON.stringify(actualList));
+    return new Promise((resolve, reject) => {
+      resolve("Initial base set");
+    });
   }
-};
+}
 
 export default UsersDataBase;

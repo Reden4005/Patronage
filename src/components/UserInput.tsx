@@ -35,7 +35,7 @@ const UserForm: React.FC<UserFormProps> = ({ visible, onCreate, onCancel }) => {
               dateOfBirth: values["dateOfBirth"]
                 ? values["dateOfBirth"].format("YYYY-MM-DD")
                 : "",
-              hobbiesName: values["hobbies"].join(" "),
+              hobbiesName: values["hobbies"],
             });
           })
           .catch((info) => {

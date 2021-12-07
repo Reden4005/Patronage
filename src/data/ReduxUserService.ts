@@ -18,18 +18,21 @@ class ReduxUserService {
       .get("currentUsersBase")
       .then((data) => {
         dispatch(spinnerActions.toggle());
-        const transformedUsers = data.map<User>((user: User) => {
+        const transformedUsers = data.map<User>((user: any) => {
           let mappedHobbies = [];
-
-          for (let i = 0; i < user.hobbies.length; i++) {
-            const hobbiesString = map.get(user.hobbies[i]);
-            if (hobbiesString != null) mappedHobbies.push(hobbiesString.name);
-          }
-
-          return {
-            ...user,
-            hobbiesName: mappedHobbies.join(" "),
-          };
+          if (user.hobbies) {
+            for (let i = 0; i < user.hobbies.length; i++) {
+              const hobbiesString = map.get(user.hobbies[i]);
+              if (hobbiesString != null) mappedHobbies.push(hobbiesString.name);
+            }
+            return {
+              ...user,
+              hobbiesName: mappedHobbies,
+            };
+          } else
+            return {
+              ...user,
+            };
         });
         setTimeout(() => {
           dispatch(listActions.initializeState(transformedUsers));

@@ -80,7 +80,7 @@ const Columns = () => {
       title: "Date of birth",
       dataIndex: "dateOfBirth",
       key: "dateOfBirth",
-      width: "7%",
+      width: "10%",
       sorter: (a, b) => a.dateOfBirth.localeCompare(b.dateOfBirth),
       ...getColumnSearchProps("dateOfBirth"),
     },
@@ -90,11 +90,12 @@ const Columns = () => {
       key: "hobbiesName",
       width: "10%",
       ...getColumnSearchProps("hobbiesName"),
+      render: value => value.join(" ")
     },
     {
       title: "Action",
       key: "action",
-      width: "21%",
+      width: "20%",
       render: (record) => (
         <>
           <Space id={record.id} size="middle">

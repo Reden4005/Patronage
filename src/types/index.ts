@@ -11,7 +11,7 @@ export interface UserData {
   address: string;
   dateOfBirth: moment.Moment;
   hobbies: string[];
-  hobbiesName?: string;
+  hobbiesName?: string[];
 };
 
 /** type User for data from base of users*/
@@ -26,7 +26,7 @@ export interface User {
   address: string;
   dateOfBirth: string;
   hobbies: string[];
-  hobbiesName?: string;
+  hobbiesName?: string[];
 };
 
 export type Hobbie = {

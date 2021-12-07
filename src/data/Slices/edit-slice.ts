@@ -22,7 +22,7 @@ const editSlice = createSlice({
         address: action.payload.address,
         dateOfBirth: action.payload.dateOfBirth,
         hobbies: action.payload.hobbies,
-        hobbiesName: action.payload.hobbiesName.split(" "),
+        hobbiesName: action.payload.hobbiesName,
       };
     },
     close(state) {

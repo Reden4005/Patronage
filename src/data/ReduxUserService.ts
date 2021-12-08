@@ -4,6 +4,7 @@ import { User } from "../types";
 import { listActions } from "./Slices/list-slice";
 import { Hobbie } from "../types";
 import { spinnerActions } from "./Slices/spinner-slice";
+import { bulkDeleteActions } from "./Slices/bulkDelete-slice";
 
 class ReduxUserService {
   private service = new UsersDataBase();
@@ -79,8 +80,24 @@ class ReduxUserService {
       .catch((err) => console.log(err));
   }
 
+  addNewUsers(dispatch: AppDispatch, users: User[]) {
+    let promises = [];
+    for (let i = 0; i < users.length; i++) {
+      promises.push(this.service.post(users[i]))
+    }
+    
+    Promise.all(promises)
+      .then(() => {
+        setTimeout(() => {
+          dispatch(listActions.addNewUsers(users));
+        }, 1000);
+      })
+      .catch((err) => console.log(err));
+  }
+
   restoreInitialState(dispatch: AppDispatch) {
     dispatch(listActions.clearState());
+    dispatch(bulkDeleteActions.clear());
     this.service.get("initialUsersBase").then(() => {
       setTimeout(() => {}, 1000);
     });

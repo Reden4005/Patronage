@@ -61,17 +61,17 @@ class ReduxDeletedUserService {
       .catch((err) => console.log(err));
   }
 
-  removeMultipleDeletedUsers(dispatch: AppDispatch, value: User[]) {
+  removeMultipleDeletedUsers(dispatch: AppDispatch, users: User[]) {
     dispatch(spinnerActions.spinnerOn());
     let promises = [];
-    for (let i = 0; i < value.length; i++) {
-      promises.push(this.deletedUsersService.delete(value[i].id));
+    for (let i = 0; i < users.length; i++) {
+      promises.push(this.deletedUsersService.delete(users[i].id));
     }
 
     Promise.all(promises)
       .then(() => {
         setTimeout(() => {
-          dispatch(undoActions.removeMultipleDeletedUsers(value));
+          dispatch(undoActions.removeMultipleDeletedUsers(users));
           dispatch(spinnerActions.spinnerOff());
         }, 1000);
       })
@@ -79,11 +79,11 @@ class ReduxDeletedUserService {
   }
 
 	clearDeletedUsersDataBase(dispatch: AppDispatch) {
-		// dispatch(spinnerActions.spinnerOn());
     this.deletedUsersService
       .update()
       .then(() => {
         setTimeout(() => {
+					dispatch(undoActions.clearStateUsersToRecover());
           dispatch(undoActions.clearState());
           dispatch(spinnerActions.spinnerOff());
         }, 1000);

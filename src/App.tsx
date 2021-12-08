@@ -62,13 +62,14 @@ const App: React.FC = () => {
   const undoIsVisible = useSelector(
     (state: RootState) => state.undo.undoIsVisible
   );
-  const undoIsClose = () => {
-    dispatch(undoActions.undoIsVisible());
-  };
+
+  const usersToRecover = useSelector(
+    (state: RootState) => state.undo.usersToRecover
+  );
+
   const deleteUser = () => {
     reduxUsersService.deleteUser(dispatch, userToDelete!.id);
     dispatch(listActions.toggleConfirmDelete(userToDelete));
-    dispatch(undoActions.deleteUser(userToDelete));
     reduxDeletedUsersService.addDeletedUser(dispatch, userToDelete as User);
   };
 
@@ -99,9 +100,15 @@ const App: React.FC = () => {
     );
   };
 
-  if ((initializeBase.length === 0) && (initialDeletedUsers.length === 0)) {
+  const undoUsers = () => {
+    reduxUsersService.addNewUsers(dispatch, usersToRecover);
+    reduxDeletedUsersService.removeMultipleDeletedUsers(dispatch, usersToRecover);
+    
+    dispatch(undoActions.undoIsVisible());
+  };
+  if (initializeBase.length === 0 && initialDeletedUsers.length === 0) {
     reduxUsersService.loadUsers(dispatch, hobbies);
-    console.log("run")
+    reduxDeletedUsersService.loadDeletedUsers(dispatch);
   }
 
   const restoreInitialState = () => {
@@ -112,9 +119,6 @@ const App: React.FC = () => {
 
   if (initializeHobbies.length === 0) {
     ReduxHobbiesService();
-  }
-  if (initialDeletedUsers.length === 0) {
-    reduxDeletedUsersService.loadDeletedUsers(dispatch);
   }
 
   return (
@@ -140,7 +144,7 @@ const App: React.FC = () => {
         visible={initialStateIsVisible}
         restoreInitialState={restoreInitialState}
       />
-      <UndoPopup visible={undoIsVisible} onOk={undoIsClose} />
+      <UndoPopup visible={undoIsVisible} onOk={undoUsers} />
       <TableOfUsers />
     </div>
   );

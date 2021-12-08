@@ -4,12 +4,14 @@ import { User } from "../../types";
 interface State {
   undoIsVisible: boolean;
   deletedUsers: User[];
+	usersToRecover: User[];
 }
 const undoSlice = createSlice({
   name: "undo",
   initialState: {
     undoIsVisible: false,
     deletedUsers: new Array<User>(),
+		usersToRecover: new Array<User>()
   } as State,
   reducers: {
     initializeState(state, action) {
@@ -17,7 +19,7 @@ const undoSlice = createSlice({
     },
 
     deleteUser(state, action) {
-      state.deletedUsers.push(action.payload);
+        state.deletedUsers.push(action.payload);
     },
 
     deleteUsers(state, action) {
@@ -25,6 +27,7 @@ const undoSlice = createSlice({
         state.deletedUsers.push(action.payload[i]);
       }
     },
+
     removeDeletedUser(state, action) {
       const filtered = state.deletedUsers.filter(
         (el) => el.id !== action.payload
@@ -46,13 +49,25 @@ const undoSlice = createSlice({
       state.deletedUsers = filtered;
     },
 
+		usersToRecover(state, action) {
+			const check = state.usersToRecover.filter(el => el.id === action.payload.id);
+			if (check.length === 0) {
+				state.usersToRecover.push(action.payload);
+			}
+		},
+
     undoIsVisible(state) {
       state.undoIsVisible = !state.undoIsVisible;
     },
 
     clearState(state) {
       state.deletedUsers = [];
+			
     },
+
+		clearStateUsersToRecover(state) {
+			state.usersToRecover = [];
+		}
   },
 });
 

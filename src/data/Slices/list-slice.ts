@@ -56,12 +56,22 @@ const listSlice = createSlice({
       const usersToDel = action.payload as User[];
       const setWithDEleteUsers = new Set();
 
-      for ( let i = 0; i < usersToDel.length; i++) {
-        setWithDEleteUsers.add(usersToDel[i].id)
+      for (let i = 0; i < usersToDel.length; i++) {
+        setWithDEleteUsers.add(usersToDel[i].id);
       }
 
-      const filtered = state.usersLists.filter(user => !setWithDEleteUsers.has(user.id))
+      const filtered = state.usersLists.filter(
+        (user) => !setWithDEleteUsers.has(user.id)
+      );
       state.usersLists = filtered;
+    },
+
+    addNewUsers(state, action) {
+      const usersToAdd = action.payload as User[];
+    
+      for (let i = 0; i < usersToAdd.length; i++) {
+        state.usersLists.push(usersToAdd[i]);
+      }
     },
 
     bulkDeleteIsVisible(state) {
@@ -69,12 +79,12 @@ const listSlice = createSlice({
     },
 
     bulkDeleteData(state, action) {
-      state.usersToDelete= action.payload;
+      state.usersToDelete = action.payload;
     },
 
     clearState(state) {
       state.usersLists = new Array<User>();
-    }
+    },
   },
 });
 

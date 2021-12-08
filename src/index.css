@@ -20,3 +20,8 @@ body {
 .ant-table-tbody {
   background: #FFFFFA;
 }
+
+.paragraph {
+  display: flex;
+  justify-content: space-between;
+}

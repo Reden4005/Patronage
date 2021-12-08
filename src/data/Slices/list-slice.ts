@@ -62,13 +62,6 @@ const listSlice = createSlice({
 
       const filtered = state.usersLists.filter(user => !setWithDEleteUsers.has(user.id))
       state.usersLists = filtered;
-      for (let i = 0; i < usersToDel.length; i++) {
-        state.deletedUsers.push(usersToDel[i]);
-      }
-    },
-
-    deleteConfirmed(state, action) {
-      state.deletedUsers.push(action.payload);
     },
 
     bulkDeleteIsVisible(state) {
@@ -81,7 +74,6 @@ const listSlice = createSlice({
 
     clearState(state) {
       state.usersLists = new Array<User>();
-      state.deletedUsers = [];
     }
   },
 });

@@ -10,10 +10,6 @@ class UsersDataBase {
     if (localStorage.getItem("initialUsersBase") == null) {
       localStorage.setItem("initialUsersBase", JSON.stringify(USERS));
     }
-
-    if (localStorage.getItem("deleteUsers") == null) {
-      localStorage.setItem("deletedUsers", JSON.stringify([]));
-    }
   }
 
   get(base: "initialUsersBase" | "currentUsersBase") {

@@ -4,8 +4,11 @@ const spinnerSlice = createSlice({
   name: "spinner",
   initialState: { visible: false },
   reducers: {
-    toggle(state) {
-      state.visible = !state.visible;
+    spinnerOn(state) {
+      state.visible = true;
+    },
+    spinnerOff(state) {
+      state.visible = false;
     },
   },
 });

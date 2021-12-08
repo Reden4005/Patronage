@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { formActions } from "../data/Slices/form-slice";
 import { listActions } from "../data/Slices/list-slice";
 import { initialStateActions } from "../data/Slices/initialState-slice";
+import { undoActions } from "../data/Slices/undo-slice";
 
 const Header: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -21,11 +22,15 @@ const Header: React.FC = () => {
   );
 
   const deletedUsersApear = useSelector(
-    (state: RootState) => state.listOfUsers.deletedUsers
+    (state: RootState) => state.undo.deletedUsers
   );
 
   const initialStateHandler = () => {
     dispatch(initialStateActions.toggle());
+  }
+
+  const undoIsVisible = () => {
+    dispatch(undoActions.undoIsVisible())
   }
 
   return (
@@ -52,6 +57,7 @@ const Header: React.FC = () => {
           key="1"
           type="primary"
           disabled={deletedUsersApear.length === 0}
+          onClick={undoIsVisible}
         >
           Undo
         </Button>,

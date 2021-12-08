@@ -18,17 +18,25 @@ import { bulkDeleteActions } from "./data/Slices/bulkDelete-slice";
 import InitialStatePopup from "./components/InitialStatePopup";
 import { initialStateActions } from "./data/Slices/initialState-slice";
 import ReduxHobbiesService from "./data/ReduxHobbiesService";
+import { undoActions } from "./data/Slices/undo-slice";
+import UndoPopup from "./components/UndoPopup";
+import ReduxDeletedUserService from "./data/ReduxDeletedUsersService";
 
 const App: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const reduxUsersService = new ReduxUserService();
+  const reduxDeletedUsersService = new ReduxDeletedUserService();
+  const hobbies = useSelector((state: RootState) => state.hobbies.hobbies);
   const initializeBase = useSelector(
     (state: RootState) => state.listOfUsers.usersLists
   );
-  const hobbies = useSelector((state: RootState) => state.hobbies.hobbies);
   const initializeHobbies = useSelector(
     (state: RootState) => state.hobbies.hobbies
   );
+  const initialDeletedUsers = useSelector(
+    (state: RootState) => state.undo.deletedUsers
+  );
+
   const inputIsVisible = useSelector((state: RootState) => state.form.visible);
   const detailsAreVisible = useSelector(
     (state: RootState) => state.details.visible
@@ -51,10 +59,17 @@ const App: React.FC = () => {
     (state: RootState) => state.initialState.visible
   );
 
+  const undoIsVisible = useSelector(
+    (state: RootState) => state.undo.undoIsVisible
+  );
+  const undoIsClose = () => {
+    dispatch(undoActions.undoIsVisible());
+  };
   const deleteUser = () => {
     reduxUsersService.deleteUser(dispatch, userToDelete!.id);
     dispatch(listActions.toggleConfirmDelete(userToDelete));
-    dispatch(listActions.deleteConfirmed(userToDelete));
+    dispatch(undoActions.deleteUser(userToDelete));
+    reduxDeletedUsersService.addDeletedUser(dispatch, userToDelete as User);
   };
 
   const onCreate = (values: User) => {
@@ -76,18 +91,30 @@ const App: React.FC = () => {
     dispatch(listActions.bulkDeleteIsVisible());
     dispatch(bulkDeleteActions.clear());
     dispatch(listActions.removeMultipleUsers(deletedUsers));
+    dispatch(undoActions.deleteUsers(deletedUsers));
     reduxUsersService.deleteMultipleUsers(dispatch, deletedUsers as User[]);
+    reduxDeletedUsersService.addMultipleDeletedUsers(
+      dispatch,
+      deletedUsers as User[]
+    );
   };
+
+  if ((initializeBase.length === 0) && (initialDeletedUsers.length === 0)) {
+    reduxUsersService.loadUsers(dispatch, hobbies);
+    console.log("run")
+  }
 
   const restoreInitialState = () => {
     reduxUsersService.restoreInitialState(dispatch);
+    reduxDeletedUsersService.clearDeletedUsersDataBase(dispatch);
     dispatch(initialStateActions.toggle());
   };
+
   if (initializeHobbies.length === 0) {
     ReduxHobbiesService();
   }
-  if (initializeBase.length === 0) {
-    reduxUsersService.loadUsers(dispatch, hobbies);
+  if (initialDeletedUsers.length === 0) {
+    reduxDeletedUsersService.loadDeletedUsers(dispatch);
   }
 
   return (
@@ -113,6 +140,7 @@ const App: React.FC = () => {
         visible={initialStateIsVisible}
         restoreInitialState={restoreInitialState}
       />
+      <UndoPopup visible={undoIsVisible} onOk={undoIsClose} />
       <TableOfUsers />
     </div>
   );

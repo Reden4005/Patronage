@@ -7,6 +7,7 @@ import editSlice from "./Slices/edit-slice";
 import bulkDeleteSlice from "./Slices/bulkDelete-slice";
 import initialStateSlice from "./Slices/initialState-slice";
 import hobbieSlice from "./Slices/hobbies-slice";
+import undoSlice from "./Slices/undo-slice";
 
 const store = configureStore({
   reducer: {
@@ -17,7 +18,8 @@ const store = configureStore({
     edit: editSlice.reducer,
     bulkDeleteKeys: bulkDeleteSlice.reducer,
     initialState: initialStateSlice.reducer,
-    hobbies: hobbieSlice.reducer
+    hobbies: hobbieSlice.reducer,
+    undo: undoSlice.reducer
   },
 });
 

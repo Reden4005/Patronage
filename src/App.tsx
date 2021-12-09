@@ -21,6 +21,7 @@ import ReduxHobbiesService from "./data/ReduxHobbiesService";
 import { undoActions } from "./data/Slices/undo-slice";
 import UndoPopup from "./components/UndoPopup";
 import ReduxDeletedUserService from "./data/ReduxDeletedUsersService";
+import { buttonsActions } from "./data/Slices/buttons-slice";
 
 const App: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -103,9 +104,12 @@ const App: React.FC = () => {
   const undoUsers = () => {
     reduxUsersService.addNewUsers(dispatch, usersToRecover);
     reduxDeletedUsersService.removeMultipleDeletedUsers(dispatch, usersToRecover);
-    
+    dispatch(undoActions.clearStateUsersToRecover());
     dispatch(undoActions.undoIsVisible());
+    dispatch(buttonsActions.buttonsClear());
+    dispatch(bulkDeleteActions.clear());
   };
+
   if (initializeBase.length === 0 && initialDeletedUsers.length === 0) {
     reduxUsersService.loadUsers(dispatch, hobbies);
     reduxDeletedUsersService.loadDeletedUsers(dispatch);

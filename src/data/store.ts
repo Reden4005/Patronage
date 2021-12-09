@@ -8,6 +8,7 @@ import bulkDeleteSlice from "./Slices/bulkDelete-slice";
 import initialStateSlice from "./Slices/initialState-slice";
 import hobbieSlice from "./Slices/hobbies-slice";
 import undoSlice from "./Slices/undo-slice";
+import buttonsSlice from "./Slices/buttons-slice";
 
 const store = configureStore({
   reducer: {
@@ -19,7 +20,8 @@ const store = configureStore({
     bulkDeleteKeys: bulkDeleteSlice.reducer,
     initialState: initialStateSlice.reducer,
     hobbies: hobbieSlice.reducer,
-    undo: undoSlice.reducer
+    undo: undoSlice.reducer,
+    buttons: buttonsSlice.reducer
   },
 });
 

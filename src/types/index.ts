@@ -21,7 +21,7 @@ export interface User {
   lastName: string;
   email: string;
   age: number;
-  gender: "male" | "female";
+  gender: "male" | "female" | "undefined";
   phoneNumber: string;
   address: string;
   dateOfBirth: string;

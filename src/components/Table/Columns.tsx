@@ -59,6 +59,10 @@ const Columns = () => {
           text: "male",
           value: "male",
         },
+        {
+          text: "undefined",
+          value: "undefined",
+        },
       ],
       onFilter: (value, record) => record.gender.indexOf(value as string) === 0,
     },
@@ -90,7 +94,7 @@ const Columns = () => {
       key: "hobbiesName",
       width: "10%",
       ...getColumnSearchProps("hobbiesName"),
-      render: value => value.join(" ")
+      render: (value) => value.join(" "),
     },
     {
       title: "Action",

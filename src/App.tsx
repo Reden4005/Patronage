@@ -1,33 +1,35 @@
-import Header from "./components/Header";
 import "antd/dist/antd.css";
-import UserForm from "./components/UserInput";
+import UserForm from "./views/UserInput";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "./data/store";
 import { formActions } from "./data/Slices/form-slice";
 import { detailsVisibleActions } from "./data/Slices/detailsVisible-slice";
 import { User } from "./types";
-import TableOfUsers from "./components/Table/TableOfUsers";
-import DetailsOfUser from "./components/DetailsOfUser";
-import EditUser from "./components/EditUser";
+import DetailsOfUser from "./views/DetailsOfUser";
+import EditUser from "./views/EditUser";
 import ReduxUserService from "./data/ReduxUserService";
-import DeletePopup from "./components/DeletePopup";
+import DeletePopup from "./views/DeletePopup";
 import { listActions } from "./data/Slices/list-slice";
 import { editActions } from "./data/Slices/edit-slice";
-import BulkDeletePopup from "./components/BulkDeletePopup";
+import BulkDeletePopup from "./views/BulkDeletePopup";
 import { bulkDeleteActions } from "./data/Slices/bulkDelete-slice";
-import InitialStatePopup from "./components/InitialStatePopup";
+import InitialStatePopup from "./views/InitialStatePopup";
 import { initialStateActions } from "./data/Slices/initialState-slice";
 import ReduxHobbiesService from "./data/ReduxHobbiesService";
 import { undoActions } from "./data/Slices/undo-slice";
-import UndoPopup from "./components/UndoPopup";
+import UndoPopup from "./views/UndoPopup";
 import ReduxDeletedUserService from "./data/ReduxDeletedUsersService";
 import { buttonsActions } from "./data/Slices/buttons-slice";
+import { Route, Routes } from "react-router-dom";
+import Main from "./views/Main";
+import { useNavigate } from "react-router-dom";
 
 const App: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const reduxUsersService = new ReduxUserService();
   const reduxDeletedUsersService = new ReduxDeletedUserService();
   const hobbies = useSelector((state: RootState) => state.hobbies.hobbies);
+  let navigate = useNavigate();
   const initializeBase = useSelector(
     (state: RootState) => state.listOfUsers.usersLists
   );
@@ -72,11 +74,12 @@ const App: React.FC = () => {
     reduxUsersService.deleteUser(dispatch, userToDelete!.id);
     dispatch(listActions.toggleConfirmDelete(userToDelete));
     reduxDeletedUsersService.addDeletedUser(dispatch, userToDelete as User);
+    navigate("/");
   };
 
   const onCreate = (values: User) => {
     reduxUsersService.addNewUser(dispatch, values);
-    dispatch(formActions.toggle());
+    dispatch(formActions.formOff());
   };
 
   const onEdit = (values: User) => {
@@ -87,6 +90,7 @@ const App: React.FC = () => {
       editedUserId as string
     );
     dispatch(editActions.close());
+    navigate("/");
   };
 
   const deleteUsers = () => {
@@ -99,15 +103,20 @@ const App: React.FC = () => {
       dispatch,
       deletedUsers as User[]
     );
+    navigate("/");
   };
 
   const undoUsers = () => {
     reduxUsersService.addNewUsers(dispatch, usersToRecover);
-    reduxDeletedUsersService.removeMultipleDeletedUsers(dispatch, usersToRecover);
+    reduxDeletedUsersService.removeMultipleDeletedUsers(
+      dispatch,
+      usersToRecover
+    );
     dispatch(undoActions.clearStateUsersToRecover());
     dispatch(undoActions.undoIsVisible());
     dispatch(buttonsActions.buttonsClear());
     dispatch(bulkDeleteActions.clear());
+    navigate("/");
   };
 
   if (initializeBase.length === 0 && initialDeletedUsers.length === 0) {
@@ -119,6 +128,7 @@ const App: React.FC = () => {
     reduxUsersService.restoreInitialState(dispatch);
     reduxDeletedUsersService.clearDeletedUsersDataBase(dispatch);
     dispatch(initialStateActions.toggle());
+    navigate("/");
   };
 
   if (initializeHobbies.length === 0) {
@@ -127,29 +137,69 @@ const App: React.FC = () => {
 
   return (
     <div>
-      <Header />
-      <UserForm
-        visible={inputIsVisible}
-        onCreate={onCreate}
-        onCancel={() => {
-          dispatch(formActions.toggle());
-        }}
-      />
-      <DetailsOfUser
-        visible={detailsAreVisible}
-        onOk={() => {
-          dispatch(detailsVisibleActions.close());
-        }}
-      />
-      <EditUser visible={editVisible} onCreate={onEdit} />
-      <DeletePopup visible={deletePopupIsVisible} deleteUser={deleteUser} />
-      <BulkDeletePopup visible={bulkDeletePopupVisible} onOk={deleteUsers} />
-      <InitialStatePopup
-        visible={initialStateIsVisible}
-        restoreInitialState={restoreInitialState}
-      />
-      <UndoPopup visible={undoIsVisible} onOk={undoUsers} />
-      <TableOfUsers />
+      <Routes>
+        <Route path="/" element={<Main />} />
+        <Route
+          path="/add-user"
+          element={
+            <UserForm
+              visible={inputIsVisible}
+              onCreate={onCreate}
+              onCancel={() => {
+                dispatch(formActions.formOff());
+                navigate("/");
+              }}
+            />
+          }
+        />
+        <Route
+          path="/user-detail/:userId"
+          element={
+            <DetailsOfUser
+              visible={detailsAreVisible}
+              onOk={() => {
+                dispatch(detailsVisibleActions.close());
+                navigate("/");
+              }}
+            />
+          }
+        />
+        <Route
+          path="edit-user/:userId"
+          element={<EditUser visible={editVisible} onCreate={onEdit} />}
+        />
+        <Route
+          path="delete-user/:userId"
+          element={
+            <DeletePopup
+              visible={deletePopupIsVisible}
+              deleteUser={deleteUser}
+            />
+          }
+        />
+        <Route
+          path="bulk-delete"
+          element={
+            <BulkDeletePopup
+              visible={bulkDeletePopupVisible}
+              onOk={deleteUsers}
+            />
+          }
+        />
+        <Route
+          path="initial-state"
+          element={
+            <InitialStatePopup
+              visible={initialStateIsVisible}
+              restoreInitialState={restoreInitialState}
+            />
+          }
+        />
+        <Route
+          path="undo"
+          element={<UndoPopup visible={undoIsVisible} onOk={undoUsers} />}
+        />
+      </Routes>
     </div>
   );
 };

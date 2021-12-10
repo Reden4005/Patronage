@@ -10,12 +10,12 @@ class ReduxDeletedUserService {
   loadDeletedUsers(dispatch: AppDispatch) {
     this.deletedUsersService
       .get()
-      .then((data) => {
+      .then(data => {
         setTimeout(() => {
           dispatch(undoActions.initializeState(data));
         }, 1000);
       })
-      .catch((err) => console.log(err));
+      .catch(err => console.log(err));
   }
 
   addDeletedUser(dispatch: AppDispatch, user: User) {
@@ -28,7 +28,7 @@ class ReduxDeletedUserService {
           dispatch(spinnerActions.spinnerOff());
         }, 1000);
       })
-      .catch((err) => console.log(err));
+      .catch(err => console.log(err));
   }
 
   removeDeleteUser = (dispatch: AppDispatch, id: string) => {
@@ -41,7 +41,7 @@ class ReduxDeletedUserService {
           dispatch(spinnerActions.spinnerOff());
         }, 1000);
       })
-      .catch((err) => console.log(err));
+      .catch(err => console.log(err));
   };
 
   addMultipleDeletedUsers(dispatch: AppDispatch, value: User[]) {
@@ -58,7 +58,7 @@ class ReduxDeletedUserService {
           dispatch(spinnerActions.spinnerOff());
         }, 1000);
       })
-      .catch((err) => console.log(err));
+      .catch(err => console.log(err));
   }
 
   removeMultipleDeletedUsers(dispatch: AppDispatch, users: User[]) {
@@ -75,21 +75,21 @@ class ReduxDeletedUserService {
           dispatch(spinnerActions.spinnerOff());
         }, 1000);
       })
-      .catch((err) => console.log(err));
+      .catch(err => console.log(err));
   }
 
-	clearDeletedUsersDataBase(dispatch: AppDispatch) {
+  clearDeletedUsersDataBase(dispatch: AppDispatch) {
     this.deletedUsersService
       .update()
       .then(() => {
         setTimeout(() => {
-					dispatch(undoActions.clearStateUsersToRecover());
+          dispatch(undoActions.clearStateUsersToRecover());
           dispatch(undoActions.clearState());
           dispatch(spinnerActions.spinnerOff());
         }, 1000);
       })
-      .catch((err) => console.log(err));
-	}
+      .catch(err => console.log(err));
+  }
 }
 
 export default ReduxDeletedUserService;

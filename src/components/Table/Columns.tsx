@@ -7,6 +7,7 @@ import { ColumnType } from "antd/lib/table";
 import { AppDispatch } from "../../data/store";
 import { useDispatch } from "react-redux";
 import FilterData from "./FilterData";
+import { Link } from "react-router-dom";
 
 const Columns = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -76,7 +77,7 @@ const Columns = () => {
       title: "Address",
       dataIndex: "address",
       key: "address",
-      width: "10%",
+      width: "15%",
       sorter: (a, b) => a.address.localeCompare(b.address),
       ...getColumnSearchProps("address"),
     },
@@ -84,7 +85,7 @@ const Columns = () => {
       title: "Date of birth",
       dataIndex: "dateOfBirth",
       key: "dateOfBirth",
-      width: "10%",
+      width: "12%",
       sorter: (a, b) => a.dateOfBirth.localeCompare(b.dateOfBirth),
       ...getColumnSearchProps("dateOfBirth"),
     },
@@ -92,47 +93,50 @@ const Columns = () => {
       title: "Hobbies",
       dataIndex: "hobbiesName",
       key: "hobbiesName",
-      width: "10%",
+      width: "15%",
       ...getColumnSearchProps("hobbiesName"),
-      render: (value) => value.join(" "),
+      render: value => value.join(", "),
     },
     {
       title: "Action",
       key: "action",
-      width: "20%",
-      render: (record) => (
+      width: "15%",
+      render: record => (
         <>
           <Space id={record.id} size="middle">
-            <Button
-              id="details"
-              onClick={() => {
-                dispatch(detailsVisibleActions.toggle(record));
-              }}
-            >
-              Detail
-            </Button>
-            <Button
-              id="delete"
-              onClick={() => {
-                dispatch(listActions.toggleConfirmDelete(record));
-              }}
-            >
-              Delete
-            </Button>
-            <Button
-              id="edit"
-              onClick={() => {
-                dispatch(editActions.toggle(record));
-              }}
-            >
-              Edit
-            </Button>
+            <Link to={`/user-detail/${record.id}`}>
+              <Button
+                id="details"
+                onClick={() => {
+                  dispatch(detailsVisibleActions.toggle(record));
+                }}>
+                Details
+              </Button>
+            </Link>
+            <Link to={`delete-user/${record.id}`}>
+              <Button
+                id="delete"
+                onClick={() => {
+                  dispatch(listActions.toggleConfirmDelete(record));
+                }}>
+                Delete
+              </Button>
+            </Link>
+            <Link to={`edit-user/${record.id}`}>
+              <Button
+                id="edit"
+                onClick={() => {
+                  dispatch(editActions.toggle(record));
+                }}>
+                Edit
+              </Button>
+            </Link>
           </Space>
         </>
       ),
     },
   ];
-	return columns;
+  return columns;
 };
 
 export default Columns;

@@ -46,9 +46,7 @@ const listSlice = createSlice({
     },
 
     removeUser(state, action) {
-      const filtered = state.usersLists.filter(
-        (el) => el.id !== action.payload
-      );
+      const filtered = state.usersLists.filter(el => el.id !== action.payload);
       state.usersLists = filtered;
     },
 
@@ -61,14 +59,14 @@ const listSlice = createSlice({
       }
 
       const filtered = state.usersLists.filter(
-        (user) => !setWithDEleteUsers.has(user.id)
+        user => !setWithDEleteUsers.has(user.id)
       );
       state.usersLists = filtered;
     },
 
     addNewUsers(state, action) {
       const usersToAdd = action.payload as User[];
-    
+
       for (let i = 0; i < usersToAdd.length; i++) {
         state.usersLists.push(usersToAdd[i]);
       }

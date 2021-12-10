@@ -12,7 +12,7 @@ const RowSelection = () => {
   const selectedRowKeys = useSelector(
     (state: RootState) => state.bulkDeleteKeys.keys
   );
-  
+
   const onSelectedChange = (
     selectedRowKeys: React.Key[],
     selectedRows: User[]

@@ -39,7 +39,7 @@ class UsersDataBase {
     const actualList: User[] = JSON.parse(
       localStorage.getItem(UsersDataBase.USERBASE_KEY) as string
     );
-    const filtered = actualList.filter((el) => el.id !== id);
+    const filtered = actualList.filter(el => el.id !== id);
     localStorage.setItem(UsersDataBase.USERBASE_KEY, JSON.stringify(filtered));
     return new Promise((resolve, reject) => {
       resolve("User deleted");
@@ -50,7 +50,7 @@ class UsersDataBase {
     const actualList: User[] = JSON.parse(
       localStorage.getItem(UsersDataBase.USERBASE_KEY) as string
     );
-    const filtered = actualList.filter((el) => el.id !== id);
+    const filtered = actualList.filter(el => el.id !== id);
     filtered.push({ ...values, id: id });
     localStorage.setItem(UsersDataBase.USERBASE_KEY, JSON.stringify(filtered));
     return new Promise((resolve, reject) => {

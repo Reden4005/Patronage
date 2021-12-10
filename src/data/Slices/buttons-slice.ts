@@ -19,32 +19,30 @@ const buttonsSlice = createSlice({
           `#${state.buttons[i]}`
         );
 
-				let tick: HTMLSpanElement| null = document.querySelector(
-					`#tick${state.buttons[i].slice(3)}`
-				);
-				button!.style.background = "#A8ECE7";
+        let tick: HTMLSpanElement | null = document.querySelector(
+          `#tick${state.buttons[i].slice(3)}`
+        );
+        button!.style.background = "#A8ECE7";
         button!.style.color = "white";
-				button!.disabled = true;
-				tick!.style.visibility = "visible";
+        button!.disabled = true;
+        tick!.style.visibility = "visible";
       }
-
-			
     },
-		buttonsClear(state) {
-			for (let i = 0; i < state.buttons.length; i++) {
+    buttonsClear(state) {
+      for (let i = 0; i < state.buttons.length; i++) {
         let button: HTMLButtonElement | null = document.querySelector(
           `#${state.buttons[i]}`
         );
-				let tick: HTMLSpanElement | null = document.querySelector(
+        let tick: HTMLSpanElement | null = document.querySelector(
           `#tick${state.buttons[i].slice(3)}`
         );
         button!.style.background = "white";
         button!.style.color = "#1890ff";
-				button!.disabled = false;
-				tick!.style.visibility = "hidden";
+        button!.disabled = false;
+        tick!.style.visibility = "hidden";
       }
-			state.buttons = [];
-		}
+      state.buttons = [];
+    },
   },
 });
 

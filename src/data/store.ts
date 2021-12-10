@@ -21,7 +21,7 @@ const store = configureStore({
     initialState: initialStateSlice.reducer,
     hobbies: hobbieSlice.reducer,
     undo: undoSlice.reducer,
-    buttons: buttonsSlice.reducer
+    buttons: buttonsSlice.reducer,
   },
 });
 

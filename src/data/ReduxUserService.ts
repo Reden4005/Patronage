@@ -17,7 +17,7 @@ class ReduxUserService {
 
     this.service
       .get("currentUsersBase")
-      .then((data) => {
+      .then(data => {
         dispatch(spinnerActions.spinnerOn());
         const transformedUsers = data.map<User>((user: any) => {
           let mappedHobbies = [];
@@ -40,7 +40,7 @@ class ReduxUserService {
           dispatch(listActions.initializeState(transformedUsers));
         }, 1000);
       })
-      .catch((err) => console.log(err));
+      .catch(err => console.log(err));
   }
 
   addNewUser(dispatch: AppDispatch, user: User) {
@@ -51,7 +51,7 @@ class ReduxUserService {
           dispatch(listActions.addNewUser(user));
         }, 1000);
       })
-      .catch((err) => console.log(err));
+      .catch(err => console.log(err));
   }
 
   deleteUser(dispatch: AppDispatch, id: string) {
@@ -62,7 +62,7 @@ class ReduxUserService {
           dispatch(listActions.removeUser(id));
         }, 1000);
       })
-      .catch((err) => console.log(err));
+      .catch(err => console.log(err));
   }
 
   deleteMultipleUsers(dispatch: AppDispatch, value: User[]) {
@@ -77,22 +77,22 @@ class ReduxUserService {
           dispatch(listActions.removeMultipleUsers(value));
         }, 1000);
       })
-      .catch((err) => console.log(err));
+      .catch(err => console.log(err));
   }
 
   addNewUsers(dispatch: AppDispatch, users: User[]) {
     let promises = [];
     for (let i = 0; i < users.length; i++) {
-      promises.push(this.service.post(users[i]))
+      promises.push(this.service.post(users[i]));
     }
-    
+
     Promise.all(promises)
       .then(() => {
         setTimeout(() => {
           dispatch(listActions.addNewUsers(users));
         }, 1000);
       })
-      .catch((err) => console.log(err));
+      .catch(err => console.log(err));
   }
 
   restoreInitialState(dispatch: AppDispatch) {

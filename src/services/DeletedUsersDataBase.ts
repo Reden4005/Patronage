@@ -36,7 +36,7 @@ class DeletedUsersDataBase {
     const deletedList: User[] = JSON.parse(
       localStorage.getItem(DeletedUsersDataBase.USERBASE_KEY) as string
     );
-    const filtered = deletedList.filter((el) => el.id !== id);
+    const filtered = deletedList.filter(el => el.id !== id);
     localStorage.setItem(
       DeletedUsersDataBase.USERBASE_KEY,
       JSON.stringify(filtered)
@@ -48,9 +48,9 @@ class DeletedUsersDataBase {
 
   update() {
     localStorage.setItem(DeletedUsersDataBase.USERBASE_KEY, JSON.stringify([]));
-		 return new Promise((resolve, reject) => {
-       resolve("Deleted user clear");
-     });
+    return new Promise((resolve, reject) => {
+      resolve("Deleted user clear");
+    });
   }
 }
 

@@ -22,7 +22,7 @@ const detailsVisibilitySlice = createSlice({
         address: action.payload.address,
         dateOfBirth: action.payload.dateOfBirth,
         hobbies: action.payload.hobbies,
-        hobbiesName: action.payload.hobbiesName.join(" "),
+        hobbiesName: action.payload.hobbiesName.join(", "),
       };
     },
     close(state) {

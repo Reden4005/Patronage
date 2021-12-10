@@ -3,14 +3,14 @@ import React from "react";
 
 const bulkDeleteSlice = createSlice({
   name: "bulkDeleteKeys",
-  initialState: { keys: new Array<React.Key>(0)}  ,
+  initialState: { keys: new Array<React.Key>(0) },
   reducers: {
     addKeys(state, action) {
       state.keys = action.payload;
     },
-		clear(state) {
-			state.keys = []
-		}
+    clear(state) {
+      state.keys = [];
+    },
   },
 });
 

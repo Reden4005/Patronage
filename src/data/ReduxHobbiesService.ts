@@ -7,7 +7,7 @@ const ReduxHobbiesService = () => {
   const service = new HobbiesDataBase();
   const dispatch = useDispatch<AppDispatch>();
 
-  service.get().then((data) => {
+  service.get().then(data => {
     setTimeout(() => {
       dispatch(hobbieActions.initializeState(data));
     }, 500);

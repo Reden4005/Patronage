@@ -4,23 +4,25 @@ import { AppDispatch, RootState } from "../data/store";
 import { undoActions } from "../data/Slices/undo-slice";
 import { bulkDeleteActions } from "../data/Slices/bulkDelete-slice";
 import { buttonsActions } from "../data/Slices/buttons-slice";
+import { useNavigate } from "react-router-dom";
 
 interface myProps {
   visible: boolean;
   onOk: () => void;
 }
 
-const UndoPopup: React.FC<myProps> = (props) => {
+const UndoPopup: React.FC<myProps> = props => {
   const deletedUsers = useSelector(
     (state: RootState) => state.undo.deletedUsers
   );
   const dispatch = useDispatch<AppDispatch>();
-
+  const navigate = useNavigate();
   const onCancel = () => {
     dispatch(undoActions.undoIsVisible());
     dispatch(undoActions.clearStateUsersToRecover());
-		dispatch(buttonsActions.buttonsClear());
-		dispatch(bulkDeleteActions.clear());
+    dispatch(buttonsActions.buttonsClear());
+    dispatch(bulkDeleteActions.clear());
+    navigate("/");
   };
 
   return (
@@ -30,11 +32,13 @@ const UndoPopup: React.FC<myProps> = (props) => {
       visible={props.visible}
       onOk={props.onOk}
       onCancel={onCancel}
-    >
-      {deletedUsers.map((user) => (
+      okText="Recover marked users">
+      {deletedUsers.map(user => (
         <p className="paragraph" key={`undo${user.id}`}>
           {user.name} {user.lastName}
-          <span id={`tick${user.id}`} style={{visibility: "hidden"}}>✔</span>
+          <span id={`tick${user.id}`} style={{ visibility: "hidden" }}>
+            ✔
+          </span>
           <Button
             disabled={false}
             id={`btn${user.id}`}
@@ -42,9 +46,8 @@ const UndoPopup: React.FC<myProps> = (props) => {
               dispatch(buttonsActions.addButton(`btn${user.id}`));
               dispatch(buttonsActions.buttonConfirmed());
               dispatch(undoActions.usersToRecover(user));
-            }}
-          >
-            Recover
+            }}>
+            Restore
           </Button>
         </p>
       ))}

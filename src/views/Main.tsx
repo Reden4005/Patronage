@@ -3,7 +3,7 @@ import TableOfUsers from "../components/Table/TableOfUsers";
 
 const Main = () => {
   return (
-    <div>
+    <div className="main">
       <Header />
       <TableOfUsers />
     </div>

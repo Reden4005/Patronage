@@ -5,6 +5,7 @@ interface State {
   visible: boolean;
   edit?: User;
 }
+
 const editSlice = createSlice({
   name: "edit",
   initialState: { visible: false, edit: undefined } as State,

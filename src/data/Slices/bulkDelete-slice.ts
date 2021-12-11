@@ -8,7 +8,7 @@ const bulkDeleteSlice = createSlice({
     addKeys(state, action) {
       state.keys = action.payload;
     },
-    clear(state) {
+    clear(state): void {
       state.keys = [];
     },
   },

@@ -40,9 +40,8 @@ const Header: React.FC = () => {
 
   return (
     <PageHeader
-      onBack={() => window.history.back()}
       title="USERS BASE"
-      style={{ width: "98%" }}
+      style={{ width: "100%", marginBottom: "20px", marginTop: "15px" }}
       extra={[
         <Link key="addNewUser" to="/add-user">
           <Button key="4" onClick={userInputHandler} type="primary">

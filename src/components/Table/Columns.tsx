@@ -42,7 +42,7 @@ const Columns = () => {
       title: "Age",
       dataIndex: "age",
       key: "age",
-      width: "5%",
+      width: "8%",
       sorter: (a, b) => a.age - b.age,
       ...getColumnSearchProps("age"),
     },
@@ -77,7 +77,7 @@ const Columns = () => {
       title: "Address",
       dataIndex: "address",
       key: "address",
-      width: "15%",
+      width: "11%",
       sorter: (a, b) => a.address.localeCompare(b.address),
       ...getColumnSearchProps("address"),
     },
@@ -93,7 +93,7 @@ const Columns = () => {
       title: "Hobbies",
       dataIndex: "hobbiesName",
       key: "hobbiesName",
-      width: "15%",
+      width: "10%",
       ...getColumnSearchProps("hobbiesName"),
       render: value => value.join(", "),
     },
@@ -104,7 +104,7 @@ const Columns = () => {
       render: record => (
         <>
           <Space id={record.id} size="middle">
-            <Link to={`/user-detail/${record.id}`}>
+            <Link to={`/user-details/${record.id}`}>
               <Button
                 id="details"
                 onClick={() => {

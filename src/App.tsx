@@ -153,7 +153,7 @@ const App: React.FC = () => {
           }
         />
         <Route
-          path="/user-detail/:userId"
+          path="/user-details/:userId"
           element={
             <DetailsOfUser
               visible={detailsAreVisible}

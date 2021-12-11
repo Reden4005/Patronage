@@ -21,9 +21,11 @@ const TableOfUsers: React.FC = () => {
           type: "checkbox",
           ...RowSelection(),
         }}
-        style={{ width: "97%" }}
+        style={{ width: "100%" }}
         loading={loading}
         bordered
+        pagination={{ pageSize: 20 }}
+        scroll={{ y: "65vh" }}
       />
     </>
   );

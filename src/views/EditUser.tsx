@@ -124,7 +124,7 @@ const EditUser: React.FC<UserFormProps> = ({ visible, onCreate }) => {
           <Select mode="multiple">
             {hobbies.map(el => {
               return (
-                <Option key={el.id} value={el.name}>
+                <Option key={`h${el.id}`} value={el.name}>
                   {el.name}
                 </Option>
               );

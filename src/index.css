@@ -16,11 +16,17 @@ body {
   margin-top: 15px;
 }
 
-:root {
-  margin: 20px;
+.ant-table-tbody {
+  background: #fdfaf4;
 }
 
 .paragraph {
   display: flex;
   justify-content: space-between;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  margin: 0 20px;
 }
